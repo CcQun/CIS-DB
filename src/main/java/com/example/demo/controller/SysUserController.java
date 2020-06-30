@@ -55,7 +55,7 @@ public class SysUserController {
         if(list.size() > 0){
             if(request.getUsername().equals(list.get(0).getUserName())&& MD5Password.equals(list.get(0).getPassword())){
                 response.setCode(1);
-                response.setMsg(request.getUsername()+"登录成功");
+                response.setMsg(request.getUsername());
             }
             else {
                 response.setCode(0);
