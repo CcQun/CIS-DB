@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.core.Utils;
 import com.example.demo.core.request.LoginRequest;
 import com.example.demo.core.response.BaseResponse;
 import com.example.demo.db.model.SysUser;
@@ -9,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+import static com.example.demo.db.service.SysUserService.*;
 
 /**
  * @Author CcQun
@@ -43,28 +48,24 @@ public class SysUserController {
     @RequestMapping("/login")
     public BaseResponse login(@RequestBody LoginRequest request){
         BaseResponse response = new BaseResponse();
-//        String username = SysUserService.findAll(request.getUsername()).getUserName();
+        String MD5Password = Utils.getMD5(request.getPassword());
         SysUser user = SysUser.builder().UserName(request.getUsername()).build();
+        List<SysUser> list = sysUserService.findAll(user);
 
-        if(request.getUsername()==""){
-            response.setCode(0);
-            response.setMsg("用户名不能为空！");
-            return response;
-        }
-        else if(request.getPassword()==""){
-            response.setCode(0);
-            response.setMsg("密码不能为空！");
-            return response;
-        }
-        else if(request.getUsername().equals(user.getUserName())&&request.getPassword().equals(user.getPassword())){
-            response.setCode(1);
-            response.setMsg(request.getUsername()+"登录成功");
-            return response;
+        if(list.size() > 0){
+            if(request.getUsername().equals(list.get(0).getUserName())&& MD5Password.equals(list.get(0).getPassword())){
+                response.setCode(1);
+                response.setMsg(request.getUsername()+"登录成功");
+            }
+            else {
+                response.setCode(0);
+                response.setMsg("用户名或密码错误");
+            }
         }
         else {
             response.setCode(0);
-            response.setMsg("用户名或密码错误");
-            return response;
+            response.setMsg("用户名"+request.getUsername()+"不存在");
         }
+        return response;
     }
 }
