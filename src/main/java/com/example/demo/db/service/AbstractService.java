@@ -54,4 +54,12 @@ public abstract class AbstractService<E, PK> {
         List<E> list = getMapper().findAll(specification);
         return list;
     }
+
+    public void save(E e) {
+        getMapper().save(e);
+    }
+
+    public void saveAll(List<E> list){
+        getMapper().saveAll(list);
+    }
 }

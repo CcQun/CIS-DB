@@ -1,16 +1,22 @@
 package com.example.demo.controller;
 
+import com.example.demo.core.response.DataResponse;
+import com.example.demo.db.model.EmployeeInfo;
+import com.example.demo.db.model.SysUser;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Author CcQun、FyLe、ZsMeng、WyYing
  * @Date 2020/6/29 17:05
  */
 @RestController()
-@RequestMapping("/api")
+@RequestMapping("/cis")
 public class ApiController {
     @Autowired
     private final EmployeeInfoService employeeInfoService;
