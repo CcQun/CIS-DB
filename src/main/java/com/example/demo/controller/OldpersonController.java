@@ -70,7 +70,7 @@ public class OldpersonController {
                 .CREATED(day)
                 .CREATEBY(request.getCREATEBY())
                 .build();
-
+        oldpersonInfoService.save(oldperson);
         BaseResponse reponse=new BaseResponse();
         reponse.setCode(1);
         reponse.setMsg("add one oldperson successfully!!");
