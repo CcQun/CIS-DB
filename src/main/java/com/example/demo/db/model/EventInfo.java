@@ -1,5 +1,6 @@
 package com.example.demo.db.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class EventInfo {
     @Id
     private Integer id;
     private Integer event_type;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date event_date;
     private String event_location;
     private String event_desc;

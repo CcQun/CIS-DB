@@ -1,5 +1,6 @@
 package com.example.demo.db.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,8 +39,10 @@ public class SysUser {
     private String MOBILE;
     private String DESCRIPTION;
     private String ISACTIVE;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Date CREATED;
     private Integer CREATEBY;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Date UPDATED;
     private Integer UPDATEBY;
     private String REMOVE;

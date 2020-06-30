@@ -1,5 +1,6 @@
 package com.example.demo.db.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,15 +34,20 @@ public class EmployeeInfo {
     private String gender;
     private String phone;
     private String id_card;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date hire_date;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date resign_date;
     private String imgset_dir;
     private String profile_photo;
     private String DESCRIPTION;
     private String ISACTIVE;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Date CREATED;
     private Integer CREATEBY;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Date UPDATED;
     private Integer UPDATEBY;
     private String REMOVE;
