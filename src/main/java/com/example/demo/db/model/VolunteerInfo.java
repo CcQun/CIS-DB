@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -20,6 +22,8 @@ import java.util.Date;
 @Builder
 @Data
 @Table(name = "volunteer_info")
+@DynamicInsert
+@DynamicUpdate
 public class VolunteerInfo {
     @Id
     private Integer id;
