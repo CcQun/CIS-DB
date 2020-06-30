@@ -16,8 +16,8 @@ import java.util.List;
  * @Date 2020/6/29 17:05
  */
 @RestController()
-@RequestMapping("/cis")
-public class ApiController {
+@RequestMapping("/else")
+public class ElseController {
     @Autowired
     private final EmployeeInfoService employeeInfoService;
     @Autowired
@@ -29,11 +29,11 @@ public class ApiController {
     @Autowired
     private final VolunteerInfoService volunteerInfoService;
 
-    public ApiController(EmployeeInfoService employeeInfoService,
-                         EventInfoService eventInfoService,
-                         OldpersonInfoService oldpersonInfoService,
-                         SysUserService sysUserService,
-                         VolunteerInfoService volunteerInfoService) {
+    public ElseController(EmployeeInfoService employeeInfoService,
+                          EventInfoService eventInfoService,
+                          OldpersonInfoService oldpersonInfoService,
+                          SysUserService sysUserService,
+                          VolunteerInfoService volunteerInfoService) {
         this.employeeInfoService = employeeInfoService;
         this.eventInfoService = eventInfoService;
         this.oldpersonInfoService = oldpersonInfoService;
