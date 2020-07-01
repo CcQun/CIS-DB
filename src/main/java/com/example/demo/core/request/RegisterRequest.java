@@ -23,7 +23,7 @@ public class RegisterRequest {
     @JsonProperty("MOBILE")
     private String MOBILE;
 
-    @JsonProperty("password")
-    private String password;
+    @JsonProperty("Password")
+    private String Password;
 
 }
