@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.core.Utils;
 import com.example.demo.core.request.LoginRequest;
+import com.example.demo.core.request.RegisterRequest;
 import com.example.demo.core.response.BaseResponse;
 import com.example.demo.db.model.SysUser;
 import com.example.demo.db.service.*;
@@ -65,6 +66,34 @@ public class SysUserController {
         else {
             response.setCode(0);
             response.setMsg("用户名"+request.getUserName()+"不存在");
+        }
+        return response;
+    }
+
+    @RequestMapping("/register")
+    public BaseResponse register(@RequestBody RegisterRequest request){
+        BaseResponse response = new BaseResponse();
+
+        SysUser user = SysUser.builder()
+                .UserName(request.getUsername())
+                .REAL_NAME(request.getREAL_NAME())
+                .SEX(request.getSEX())
+                .EMAIL(request.getEMAIL())
+                .PHONE(request.getPHONE())
+                .MOBILE(request.getMOBILE())
+                .Password(request.getPassword())
+                .build();
+        List<SysUser> list = sysUserService.findAll(user);
+
+        if(list.size() <= 0){
+            sysUserService.getMapper().save(user);
+            response.setCode(0);
+            response.setMsg("用户名或密码错误");
+
+        }
+        else {
+            response.setCode(0);
+            response.setMsg("用户"+request.getUsername()+"已存在");
         }
         return response;
     }

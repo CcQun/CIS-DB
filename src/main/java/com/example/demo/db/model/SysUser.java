@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -28,6 +25,7 @@ import java.util.Date;
 @DynamicUpdate
 public class SysUser {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer ID;
     private Integer ORG_ID;
     private Integer CLIENT_ID;
