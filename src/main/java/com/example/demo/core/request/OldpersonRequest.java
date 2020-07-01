@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class OldpersonRequest {
-    private String ID;
+    private Integer ID;
 
     private String username;
 
