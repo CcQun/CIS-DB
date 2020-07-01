@@ -147,24 +147,23 @@ public class SysUserController {
     public BaseResponse changePassword(@RequestBody ChangePassRequest request){
         BaseResponse response = new BaseResponse();
 //        System.out.println(request.toString());
-
-        String MD5Password = Utils.getMD5(request.getPassword());
+//        String MD5Password = Utils.getMD5(request.getPassword());
         String MD5Password2 = Utils.getMD5(request.getNewPassword());
 
         List<SysUser> list = sysUserService.findAllByUserName(request.getUserName());
         SysUser user = list.get(0);
 //        System.out.println(user.getUserName()+user.getPassword()+"---------"+MD5Password);
-        if(MD5Password.equals(user.getPassword()))
-        {
+//        if(MD5Password.equals(user.getPassword()))
+//        {
             user.setPassword(MD5Password2);
             sysUserService.getMapper().save(user);
             response.setCode(1);
             response.setMsg(request.getUserName());
-        }
-        else{
-            response.setCode(0);
-            response.setMsg("密码验证失败");
-        }
+//        }
+//        else{
+//            response.setCode(0);
+//            response.setMsg("密码验证失败");
+//        }
 
         return response;
     }
