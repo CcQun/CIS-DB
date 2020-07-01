@@ -5,10 +5,10 @@ import com.example.demo.core.request.LoginRequest;
 import com.example.demo.core.response.BaseResponse;
 import com.example.demo.db.model.SysUser;
 import com.example.demo.db.service.*;
-//import com.example.demo.core.request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -47,12 +47,10 @@ public class SysUserController {
 
     @RequestMapping("/login")
     public BaseResponse login(@RequestBody LoginRequest request){
-        BaseResponse response = new BaseResponse();
-        System.out.println(request.getUsername()+"_"+request.getPassword());
         String MD5Password = Utils.getMD5(request.getPassword());
         SysUser user = SysUser.builder().UserName(request.getUserName()).build();
         List<SysUser> list = sysUserService.findAll(user);
-
+        BaseResponse response = new BaseResponse();
         if(list.size() > 0){
             if(request.getUserName().equals(list.get(0).getUserName())&& MD5Password.equals(list.get(0).getPassword())){
                 response.setCode(1);
