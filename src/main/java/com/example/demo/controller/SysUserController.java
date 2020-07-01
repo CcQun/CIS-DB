@@ -101,8 +101,8 @@ public class SysUserController {
     @RequestMapping("/editSysUser")
     public BaseResponse edit(@RequestBody EditSysUserRequest request){
         BaseResponse response = new BaseResponse();
-
-        SysUser newuser = SysUser.builder()
+        System.out.println(request.toString());
+        SysUser newUser = SysUser.builder()
                 .UserName(request.getNewUserName())
                 .REAL_NAME(request.getREAL_NAME())
                 .SEX(request.getSEX())
@@ -114,7 +114,7 @@ public class SysUserController {
         List<SysUser> list = sysUserService.findAllByUserName(request.getUserName());
 
         sysUserService.getMapper().delete(list.get(0));
-        sysUserService.getMapper().save(newuser);
+        sysUserService.getMapper().save(newUser);
 
         response.setCode(1);
         response.setMsg(request.getNewUserName());
