@@ -87,9 +87,8 @@ public class SysUserController {
 
         if(list.size() <= 0){
             sysUserService.getMapper().save(user);
-            response.setCode(0);
-            response.setMsg("用户名或密码错误");
-
+            response.setCode(1);
+            response.setMsg(request.getUserName());
         }
         else {
             response.setCode(0);
