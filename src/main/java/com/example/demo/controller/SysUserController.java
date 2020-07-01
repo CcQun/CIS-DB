@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.core.Utils;
+import com.example.demo.core.request.ChangePassRequest;
 import com.example.demo.core.request.EditSysUserRequest;
 import com.example.demo.core.request.LoginRequest;
 import com.example.demo.core.request.RegisterRequest;
@@ -74,6 +75,9 @@ public class SysUserController {
     @RequestMapping("/register")
     public BaseResponse register(@RequestBody RegisterRequest request){
         BaseResponse response = new BaseResponse();
+//        System.out.println(request.toString());
+        String MD5Password = Utils.getMD5(request.getPassword());
+//        System.out.println(MD5Password+"-111");
 
         SysUser user = SysUser.builder()
                 .UserName(request.getUserName())
@@ -82,8 +86,9 @@ public class SysUserController {
                 .EMAIL(request.getEMAIL())
                 .PHONE(request.getPHONE())
                 .MOBILE(request.getMOBILE())
-                .Password(request.getPassword())
+                .Password(MD5Password)
                 .build();
+//        System.out.println(user.getPassword()+"---------");
         List<SysUser> list = sysUserService.findAll(user);
 
         if(list.size() <= 0){
@@ -101,26 +106,47 @@ public class SysUserController {
     @RequestMapping("/editSysUser")
     public BaseResponse edit(@RequestBody EditSysUserRequest request){
         BaseResponse response = new BaseResponse();
-        System.out.println(request.toString());
-        SysUser newUser = SysUser.builder()
-                .UserName(request.getNewUserName())
-                .REAL_NAME(request.getREAL_NAME())
-                .SEX(request.getSEX())
-                .EMAIL(request.getEMAIL())
-                .PHONE(request.getPHONE())
-                .MOBILE(request.getMOBILE())
-                .build();
+//        System.out.println(request.toString());
 
         List<SysUser> list = sysUserService.findAllByUserName(request.getUserName());
+        SysUser user = list.get(0);
+        user.setUserName(request.getNewUserName());
+        user.setREAL_NAME(request.getREAL_NAME());
+        user.setSEX(request.getSEX());
+        user.setEMAIL(request.getEMAIL());
+        user.setPHONE(request.getPHONE());
+        user.setMOBILE(request.getMOBILE());
 
-        sysUserService.getMapper().delete(list.get(0));
-        sysUserService.getMapper().save(newUser);
+        sysUserService.getMapper().save(user);
 
         response.setCode(1);
         response.setMsg(request.getNewUserName());
 
-//            response.setCode(0);
-//            response.setMsg("用户名"+request.getUserName()+"已存在");
+        return response;
+    }
+
+    @RequestMapping("/changePassword")
+    public BaseResponse changePassword(@RequestBody ChangePassRequest request){
+        BaseResponse response = new BaseResponse();
+//        System.out.println(request.toString());
+
+        String MD5Password = Utils.getMD5(request.getPassword());
+        String MD5Password2 = Utils.getMD5(request.getNewPassword());
+
+        List<SysUser> list = sysUserService.findAllByUserName(request.getUserName());
+        SysUser user = list.get(0);
+//        System.out.println(user.getUserName()+user.getPassword()+"---------"+MD5Password);
+        if(MD5Password.equals(user.getPassword()))
+        {
+            user.setPassword(MD5Password2);
+            sysUserService.getMapper().save(user);
+            response.setCode(1);
+            response.setMsg(request.getUserName());
+        }
+        else{
+            response.setCode(0);
+            response.setMsg("密码验证失败");
+        }
 
         return response;
     }
