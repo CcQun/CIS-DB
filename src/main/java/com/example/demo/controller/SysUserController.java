@@ -75,7 +75,7 @@ public class SysUserController {
         BaseResponse response = new BaseResponse();
 
         SysUser user = SysUser.builder()
-                .UserName(request.getUsername())
+                .UserName(request.getUserName())
                 .REAL_NAME(request.getREAL_NAME())
                 .SEX(request.getSEX())
                 .EMAIL(request.getEMAIL())
@@ -93,7 +93,7 @@ public class SysUserController {
         }
         else {
             response.setCode(0);
-            response.setMsg("用户"+request.getUsername()+"已存在");
+            response.setMsg("用户"+request.getUserName()+"已存在");
         }
         return response;
     }

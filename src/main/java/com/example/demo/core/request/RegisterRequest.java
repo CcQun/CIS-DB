@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class RegisterRequest {
-    @JsonProperty("username")
-    private String username;
+    @JsonProperty("UserName")
+    private String UserName;
 
     @JsonProperty("REAL_NAME")
     private String REAL_NAME;
