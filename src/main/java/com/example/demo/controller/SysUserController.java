@@ -49,13 +49,13 @@ public class SysUserController {
     public BaseResponse login(@RequestBody LoginRequest request){
         BaseResponse response = new BaseResponse();
         String MD5Password = Utils.getMD5(request.getPassword());
-        SysUser user = SysUser.builder().UserName(request.getUsername()).build();
+        SysUser user = SysUser.builder().UserName(request.getUserName()).build();
         List<SysUser> list = sysUserService.findAll(user);
 
         if(list.size() > 0){
-            if(request.getUsername().equals(list.get(0).getUserName())&& MD5Password.equals(list.get(0).getPassword())){
+            if(request.getUserName().equals(list.get(0).getUserName())&& MD5Password.equals(list.get(0).getPassword())){
                 response.setCode(1);
-                response.setMsg(request.getUsername());
+                response.setMsg(request.getUserName());
             }
             else {
                 response.setCode(0);
@@ -64,7 +64,7 @@ public class SysUserController {
         }
         else {
             response.setCode(0);
-            response.setMsg("用户名"+request.getUsername()+"不存在");
+            response.setMsg("用户名"+request.getUserName()+"不存在");
         }
         return response;
     }
