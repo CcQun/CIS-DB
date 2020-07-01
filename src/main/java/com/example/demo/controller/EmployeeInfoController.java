@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.core.response.BaseResponse;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Author CcQun
  * @Date 2020/6/30 17:04
  */
+
 @RestController()
 @RequestMapping("/employeeInfo")
 public class EmployeeInfoController {
