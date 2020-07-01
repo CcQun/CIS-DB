@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -26,6 +28,7 @@ import java.util.Date;
 @DynamicInsert
 @DynamicUpdate
 public class OldpersonInfo {
+
     @Id
     private Integer ID;
     private Integer ORG_ID;
@@ -52,13 +55,20 @@ public class OldpersonInfo {
     private String secondguardian_phone;
     private String secondguardian_wechat;
     private String health_state;
+    @Column(name = "DESCRIPTION")
     private String DESCRIPTION;
+    @Column(name = "ISACTIVE")
     private String ISACTIVE;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
+    @Column(name = "CREATED")
     private Date CREATED;
+    @Column(name = "CREATEBY")
     private Integer CREATEBY;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
+    @Column(name = "UPDATED")
     private Date UPDATED;
+    @Column(name = "UPDATEBY")
     private Integer UPDATEBY;
+    @Column(name = "REMOVE")
     private String REMOVE;
 }
