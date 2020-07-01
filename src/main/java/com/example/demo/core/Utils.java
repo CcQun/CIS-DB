@@ -1,6 +1,9 @@
 package com.example.demo.core;
 
 import java.security.MessageDigest;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 放置一些静态方法
@@ -32,5 +35,12 @@ public class Utils {
             throw new RuntimeException();
         }
         return md5StrBuff.toString().toUpperCase();//字母大写
+    }
+
+    public static Date strToDateLong(String strDate) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+        ParsePosition pos = new ParsePosition(0);
+        Date strtodate = formatter.parse(strDate, pos);
+        return strtodate;
     }
 }
