@@ -62,7 +62,6 @@ public class OldpersonController {
                 .phone(request.getPhone())
                 .id_card(request.getId_card())
                 .birthday(Utils.strToDateLong(request.getBirthday()))
-              //  .checkin_date(Utils.strToDateLong(request.getCheckin_date()))
                 .room_number(request.getRoom_number())
                 .firstguardian_name(request.getFirstguardian_name())
                 .firstguardian_relationship(request.getFirstguardian_relationship())
@@ -75,8 +74,6 @@ public class OldpersonController {
                 .health_state(request.getHealth_state())
                 .DESCRIPTION(request.getDESCRIPTION())
                 .ISACTIVE(request.getISACTIVE())
-            //    .CREATED(day)
-            //    .CREATEBY(request.getCREATEBY())
                 .build();
         System.out.println("开始插表");
         BaseResponse reponse=new BaseResponse();
@@ -104,31 +101,31 @@ public class OldpersonController {
     @RequestMapping("/editOldPerson")
     public BaseResponse editOldPerson(@RequestBody OldpersonRequest request) {
 
-//        Date day=new Date();
-//        OldpersonInfo oldperson= OldpersonInfo.builder()
-//                .ID(request.getID())
-//                .gender(request.getGender())
-//                .phone(request.getPhone())
-//                .id_card(request.getId_card())
-//                .birthday(request.getBirthday())
-//                .checkin_date(request.getCheckin_date())
-//                .room_number(request.getRoom_number())
-//                .firstguardian_name(request.getFirstguardian_name())
-//                .firstguardian_relationship(request.getFirstguardian_relationship())
-//                .firstguardian_phone(request.getFirstguardian_phone())
-//                .firstguardian_wechat(request.getFirstguardian_wechat())
-//                .secondguardian_name(request.getSecondguardian_name())
-//                .secondguardian_relationship(request.getSecondguardian_relationship())
-//                .secondguardian_phone(request.getSecondguardian_phone())
-//                .secondguardian_wechat(request.getSecondguardian_wechat())
-//                .health_state(request.getHealth_state())
-//                .DESCRIPTION(request.getDESCRIPTION())
-//                .ISACTIVE(request.getISACTIVE())
-//                .UPDATED(day)
-//                .UPDATEBY(request.getCREATEBY())
-//                .build();
-//        oldpersonInfoService.save(oldperson);
-//
+        Date day=new Date();
+        OldpersonInfo oldperson= OldpersonInfo.builder()
+                .ID(request.getID())
+                .gender(request.getGender())
+                .phone(request.getPhone())
+                .id_card(request.getId_card())
+                .birthday(Utils.strToDateLong(request.getBirthday()))
+                .checkin_date(Utils.strToDateLong(request.getCheckin_date()))
+                .room_number(request.getRoom_number())
+                .firstguardian_name(request.getFirstguardian_name())
+                .firstguardian_relationship(request.getFirstguardian_relationship())
+                .firstguardian_phone(request.getFirstguardian_phone())
+                .firstguardian_wechat(request.getFirstguardian_wechat())
+                .secondguardian_name(request.getSecondguardian_name())
+                .secondguardian_relationship(request.getSecondguardian_relationship())
+                .secondguardian_phone(request.getSecondguardian_phone())
+                .secondguardian_wechat(request.getSecondguardian_wechat())
+                .health_state(request.getHealth_state())
+                .DESCRIPTION(request.getDESCRIPTION())
+                .ISACTIVE(request.getISACTIVE())
+                .UPDATED(day)
+                .UPDATEBY(request.getCREATEBY())
+                .build();
+        oldpersonInfoService.save(oldperson);
+
         BaseResponse reponse=new BaseResponse();
         reponse.setCode(1);
         reponse.setMsg("edit oldperson successfully!!");
