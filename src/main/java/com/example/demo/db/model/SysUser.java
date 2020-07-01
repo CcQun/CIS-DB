@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -30,7 +32,10 @@ public class SysUser {
     private Integer ID;
     private Integer ORG_ID;
     private Integer CLIENT_ID;
+
+    @Column(name = "username")
     private String UserName;
+
     private String Password;
     private String REAL_NAME;
     private String SEX;
