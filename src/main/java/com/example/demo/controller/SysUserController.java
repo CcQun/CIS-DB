@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.core.Utils;
+import com.example.demo.core.request.EditSysUserRequest;
 import com.example.demo.core.request.LoginRequest;
 import com.example.demo.core.request.RegisterRequest;
 import com.example.demo.core.response.BaseResponse;
@@ -94,6 +95,33 @@ public class SysUserController {
             response.setCode(0);
             response.setMsg("用户"+request.getUserName()+"已存在");
         }
+        return response;
+    }
+
+    @RequestMapping("/editSysUser")
+    public BaseResponse edit(@RequestBody EditSysUserRequest request){
+        BaseResponse response = new BaseResponse();
+
+        SysUser newuser = SysUser.builder()
+                .UserName(request.getNewUserName())
+                .REAL_NAME(request.getREAL_NAME())
+                .SEX(request.getSEX())
+                .EMAIL(request.getEMAIL())
+                .PHONE(request.getPHONE())
+                .MOBILE(request.getMOBILE())
+                .build();
+
+        List<SysUser> list = sysUserService.findAllByUserName(request.getUserName());
+
+        sysUserService.getMapper().delete(list.get(0));
+        sysUserService.getMapper().save(newuser);
+
+        response.setCode(1);
+        response.setMsg(request.getNewUserName());
+
+//            response.setCode(0);
+//            response.setMsg("用户名"+request.getUserName()+"已存在");
+
         return response;
     }
 }
