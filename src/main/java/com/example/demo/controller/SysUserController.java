@@ -6,6 +6,8 @@ import com.example.demo.core.request.EditSysUserRequest;
 import com.example.demo.core.request.LoginRequest;
 import com.example.demo.core.request.RegisterRequest;
 import com.example.demo.core.response.BaseResponse;
+import com.example.demo.core.response.DataResponse;
+import com.example.demo.core.response.ListResponse;
 import com.example.demo.db.model.SysUser;
 import com.example.demo.db.service.*;
 //import com.example.demo.core.request;
@@ -100,6 +102,18 @@ public class SysUserController {
             response.setCode(0);
             response.setMsg("用户"+request.getUserName()+"已存在");
         }
+        return response;
+    }
+
+    @RequestMapping("/seeSysUser")
+    public ListResponse<SysUser> seeSysUser(@RequestBody EditSysUserRequest request){
+        ListResponse<SysUser> response = new ListResponse<>();
+        List<SysUser> list = sysUserService.findAllByUserName(request.getUserName());
+
+        response.setData(list);
+        response.setCode(1);
+        response.setMsg(request.getUserName());
+
         return response;
     }
 
