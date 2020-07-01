@@ -6,6 +6,7 @@ import java.util.Date;
 
 @Data
 public class OldpersonRequest {
+    @JsonProperty("ID")
     private Integer ID;
 
     private String username;
@@ -48,6 +49,6 @@ public class OldpersonRequest {
     @JsonProperty("CREATEBY")
     private Integer CREATEBY;
     @JsonProperty("UPDATEBY")
-    private String UPDATEBY;
+    private Integer UPDATEBY;
 
 }
