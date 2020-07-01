@@ -34,11 +34,11 @@ public class VolunteerInfo {
     private String gender;
     private String phone;
     private String id_card;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Date birthday;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Date checkin_date;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Date checkout_date;
     private String imgset_dir;
     private String profile_photo;

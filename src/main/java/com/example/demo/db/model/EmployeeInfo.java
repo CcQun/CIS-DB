@@ -34,11 +34,11 @@ public class EmployeeInfo {
     private String gender;
     private String phone;
     private String id_card;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Date birthday;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Date hire_date;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Date resign_date;
     private String imgset_dir;
     private String profile_photo;

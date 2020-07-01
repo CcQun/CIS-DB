@@ -29,7 +29,7 @@ public class EventInfo {
     @Id
     private Integer id;
     private Integer event_type;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:SS")
     private Date event_date;
     private String event_location;
     private String event_desc;
