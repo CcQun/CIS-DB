@@ -56,7 +56,6 @@ public class OldpersonController {
         System.out.println("加入老人");
         System.out.println("创建时间"+day.toString());
         OldpersonInfo oldperson= OldpersonInfo.builder()
-                .ID(getIDNumber()+1)
                 .username(request.getUsername())
                 .gender(request.getGender())
                 .phone(request.getPhone())
@@ -77,18 +76,13 @@ public class OldpersonController {
                 .build();
         System.out.println("开始插表");
         BaseResponse reponse=new BaseResponse();
-        List<OldpersonInfo> oldpersons = oldpersonInfoService.findAll();
-        if(oldpersons.size()>0){
-            reponse.setCode(0);
-            reponse.setMsg("add one oldperson failed, this old person already exists!!");
-            System.out.println("加入失败");
-            return reponse;
-        }
+
+        oldperson.setID(getIDNumber()+1);
         oldperson.setCheckin_date(Utils.strToDateLong(request.getCheckin_date()));
         oldperson.setCREATED(day);
-        System.out.println(request.getCREATEBY());
-        System.out.println(request.getDESCRIPTION());
-        System.out.println(request.getISACTIVE());
+//        System.out.println(request.getCREATEBY());
+//        System.out.println(request.getDESCRIPTION());
+//        System.out.println(request.getISACTIVE());
         oldperson.setCREATEBY(request.getCREATEBY());
         oldpersonInfoService.save(oldperson);
         System.out.println(request.getCREATEBY()+"加入成功");
@@ -125,11 +119,36 @@ public class OldpersonController {
                 .UPDATEBY(request.getCREATEBY())
                 .build();
         oldpersonInfoService.save(oldperson);
-
         BaseResponse reponse=new BaseResponse();
+        List<OldpersonInfo> oldpersons = oldpersonInfoService.findAll();
+        if(oldpersons.size()>0){
+            reponse.setCode(0);
+            reponse.setMsg("add one oldperson failed, this old person already exists!!");
+            System.out.println("加入失败");
+            return reponse;
+        }
         reponse.setCode(1);
         reponse.setMsg("edit oldperson successfully!!");
         return reponse;
+    }
+
+    //查看老人信息
+    @RequestMapping("/queryOldPerson")
+    public ListResponse queryOldPerson() {
+        System.out.println("查询开始");
+        OldpersonInfo oldperson= OldpersonInfo.builder()
+                .build();
+
+        List<OldpersonInfo> oldpersons = oldpersonInfoService.findAll();
+
+        ListResponse response=new ListResponse();
+
+
+        response.setCode(1);
+        response.setMsg("query oldperson successfully!!");
+        response.setData(oldpersons);
+        System.out.println("查询结束");
+        return response;
     }
 
     //获得最大id
