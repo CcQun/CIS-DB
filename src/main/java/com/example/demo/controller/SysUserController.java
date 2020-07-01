@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.core.Utils;
+import com.example.demo.core.request.EditSysUserRequest;
 import com.example.demo.core.request.LoginRequest;
+import com.example.demo.core.request.RegisterRequest;
 import com.example.demo.core.response.BaseResponse;
 import com.example.demo.db.model.SysUser;
 import com.example.demo.db.service.*;
@@ -47,10 +49,11 @@ public class SysUserController {
 
     @RequestMapping("/login")
     public BaseResponse login(@RequestBody LoginRequest request){
+        BaseResponse response = new BaseResponse();
         String MD5Password = Utils.getMD5(request.getPassword());
         SysUser user = SysUser.builder().UserName(request.getUserName()).build();
         List<SysUser> list = sysUserService.findAll(user);
-        BaseResponse response = new BaseResponse();
+
         if(list.size() > 0){
             if(request.getUserName().equals(list.get(0).getUserName())&& MD5Password.equals(list.get(0).getPassword())){
                 response.setCode(1);
@@ -67,11 +70,58 @@ public class SysUserController {
         }
         return response;
     }
-//
-//    @RequestMapping ("/statOldPerson")
-//    public BaseResponse statOlePerson() {
-//        BaseResponse response = new BaseResponse();
-//
-//        return response;
-//    }
+
+    @RequestMapping("/register")
+    public BaseResponse register(@RequestBody RegisterRequest request){
+        BaseResponse response = new BaseResponse();
+
+        SysUser user = SysUser.builder()
+                .UserName(request.getUserName())
+                .REAL_NAME(request.getREAL_NAME())
+                .SEX(request.getSEX())
+                .EMAIL(request.getEMAIL())
+                .PHONE(request.getPHONE())
+                .MOBILE(request.getMOBILE())
+                .Password(request.getPassword())
+                .build();
+        List<SysUser> list = sysUserService.findAll(user);
+
+        if(list.size() <= 0){
+            sysUserService.getMapper().save(user);
+            response.setCode(1);
+            response.setMsg(request.getUserName());
+        }
+        else {
+            response.setCode(0);
+            response.setMsg("用户"+request.getUserName()+"已存在");
+        }
+        return response;
+    }
+
+    @RequestMapping("/editSysUser")
+    public BaseResponse edit(@RequestBody EditSysUserRequest request){
+        BaseResponse response = new BaseResponse();
+        System.out.println(request.toString());
+        SysUser newUser = SysUser.builder()
+                .UserName(request.getNewUserName())
+                .REAL_NAME(request.getREAL_NAME())
+                .SEX(request.getSEX())
+                .EMAIL(request.getEMAIL())
+                .PHONE(request.getPHONE())
+                .MOBILE(request.getMOBILE())
+                .build();
+
+        List<SysUser> list = sysUserService.findAllByUserName(request.getUserName());
+
+        sysUserService.getMapper().delete(list.get(0));
+        sysUserService.getMapper().save(newUser);
+
+        response.setCode(1);
+        response.setMsg(request.getNewUserName());
+
+//            response.setCode(0);
+//            response.setMsg("用户名"+request.getUserName()+"已存在");
+
+        return response;
+    }
 }
