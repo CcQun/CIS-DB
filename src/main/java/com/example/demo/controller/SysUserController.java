@@ -48,6 +48,7 @@ public class SysUserController {
     @RequestMapping("/login")
     public BaseResponse login(@RequestBody LoginRequest request){
         BaseResponse response = new BaseResponse();
+        System.out.println(request.getUsername()+"_"+request.getPassword());
         String MD5Password = Utils.getMD5(request.getPassword());
         SysUser user = SysUser.builder().UserName(request.getUsername()).build();
         List<SysUser> list = sysUserService.findAll(user);
@@ -68,4 +69,11 @@ public class SysUserController {
         }
         return response;
     }
+//
+//    @RequestMapping ("/statOldPerson")
+//    public BaseResponse statOlePerson() {
+//        BaseResponse response = new BaseResponse();
+//
+//        return response;
+//    }
 }
