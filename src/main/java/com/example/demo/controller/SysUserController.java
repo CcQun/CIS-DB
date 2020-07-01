@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.demo.db.service.SysUserService.*;
@@ -51,16 +52,19 @@ public class SysUserController {
     }
 
     @RequestMapping("/login")
-    public BaseResponse login(@RequestBody LoginRequest request){
-        BaseResponse response = new BaseResponse();
+    public ListResponse login(@RequestBody LoginRequest request){
+        ListResponse response = new ListResponse();
+        List returnList = new ArrayList();
         String MD5Password = Utils.getMD5(request.getPassword());
-        SysUser user = SysUser.builder().UserName(request.getUserName()).build();
+        SysUser user = SysUser.builder().UserName(request.getUserName()).Password(MD5Password).build();
         List<SysUser> list = sysUserService.findAll(user);
 
         if(list.size() > 0){
             if(request.getUserName().equals(list.get(0).getUserName())&& MD5Password.equals(list.get(0).getPassword())){
                 response.setCode(1);
                 response.setMsg(request.getUserName());
+                returnList.add(list.get(0).getID());
+                response.setData(returnList);
             }
             else {
                 response.setCode(0);
@@ -91,7 +95,7 @@ public class SysUserController {
                 .Password(MD5Password)
                 .build();
 //        System.out.println(user.getPassword()+"---------");
-        List<SysUser> list = sysUserService.findAll(user);
+        List<SysUser> list = sysUserService.findAllByUserName(request.getUserName());
 
         if(list.size() <= 0){
             sysUserService.getMapper().save(user);
