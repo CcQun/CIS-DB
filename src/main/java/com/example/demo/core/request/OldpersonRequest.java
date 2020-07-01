@@ -1,10 +1,13 @@
 package com.example.demo.core.request;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
 public class OldpersonRequest {
+    private String ID;
+
     private String username;
 
     private String gender;
@@ -13,9 +16,11 @@ public class OldpersonRequest {
 
     private String id_card;
 
-    private Date birthday;
+    private String birthday;
 
-    private Date checkin_date;
+    private String checkin_date;
+
+    private Date checkout_date;
 
     private String room_number;
 
@@ -36,11 +41,13 @@ public class OldpersonRequest {
     private String secondguardian_wechat;
 
     private String health_state;
-
+    @JsonProperty("DESCRIPTION")
     private String DESCRIPTION;
-
+    @JsonProperty("ISACTIVE")
     private String ISACTIVE;
-
+    @JsonProperty("CREATEBY")
     private Integer CREATEBY;
+    @JsonProperty("UPDATEBY")
+    private String UPDATEBY;
 
 }
