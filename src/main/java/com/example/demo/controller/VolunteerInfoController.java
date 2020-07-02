@@ -1,33 +1,24 @@
 package com.example.demo.controller;
 
 import com.example.demo.core.Utils;
-<<<<<<<<< Temporary merge branch 1
-import com.example.demo.core.request.EmployeeRequest;
 import com.example.demo.core.request.VolunteerRequest;
 import com.example.demo.core.response.BaseResponse;
 import com.example.demo.core.response.ListResponse;
-import com.example.demo.db.model.EmployeeInfo;
 import com.example.demo.db.model.VolunteerInfo;
-import com.example.demo.core.Utils;
 import com.example.demo.core.response.StatResponse;
->>>>>>>>> Temporary merge branch 2
-import com.example.demo.db.model.VolunteerInfo;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-<<<<<<<<< Temporary merge branch 1
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import java.util.List;
 
 /**
- * @Author CcQun zsm
+ * @Author fyl CcQun zsm
  * @Date 2020/6/30 17:07
  */
 @RestController()
@@ -56,7 +47,7 @@ public class VolunteerInfoController {
         this.volunteerInfoService = volunteerInfoService;
     }
 
-<<<<<<<<< Temporary merge branch 1
+
     //录入义工信息/新增
     @RequestMapping("/addVolunteer")
     public BaseResponse addVolunteer(@RequestBody VolunteerRequest request) throws ParseException {
@@ -92,6 +83,7 @@ public class VolunteerInfoController {
         response.setMsg("add one oldperson successfully!!");
         return response;
     }
+
     //修改义工信息
     @RequestMapping("/editVolunteer")
     public BaseResponse editVolunteer(@RequestBody VolunteerRequest request) {
@@ -118,6 +110,7 @@ public class VolunteerInfoController {
         reponse.setMsg("edit volunteer successfully!!");
         return reponse;
     }
+
     //查看义工信息
     @RequestMapping("/queryVolunteer")
     public ListResponse queryVolunteer() {
@@ -144,8 +137,6 @@ public class VolunteerInfoController {
     //删除义工
     @RequestMapping("/removeVolunteer")
     public BaseResponse removeVolunteer(@RequestBody VolunteerRequest request) {
-
-
         Date day = new Date();
         BaseResponse response=new BaseResponse();
         VolunteerInfo volunteer=volunteerInfoService.findVolunteerByID(request.getId());
@@ -158,9 +149,6 @@ public class VolunteerInfoController {
         return response;
     }
 
-
-
-
     //获得最大id
     public Integer getIDNumber() {
         List<VolunteerInfo> volunteers = volunteerInfoService.findAll();
@@ -172,7 +160,7 @@ public class VolunteerInfoController {
         }
         return idNumber;
     }
-=========
+
     @RequestMapping("/statVolunteer")
     public StatResponse statVolunteer() throws Exception {
         StatResponse response = new StatResponse();
@@ -220,5 +208,4 @@ public class VolunteerInfoController {
         response.setMsg("统计信息返回");
         return response;
     }
->>>>>>>>> Temporary merge branch 2
 }
