@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Author CcQun
+ * @Author CcQun zsm
  * @Date 2020/6/30 17:05
  */
 @RestController()
@@ -54,9 +54,17 @@ public class OldpersonController {
     @RequestMapping("/addOldPerson")
     public BaseResponse addOldPerson(@RequestBody OldpersonRequest request) throws ParseException {
 
+        BaseResponse response=new BaseResponse();
+        OldpersonInfo temp=oldpersonInfoService.findOldpersonById_card(request.getId_card());
+        if(temp!=null&&temp.getREMOVE().equals("0")){
+            response.setCode(0);
+            response.setMsg("this oldpersonn has already in this system!!");
+            return response;
+        }
         Date day = new Date();
         System.out.println("加入老人");
         System.out.println("创建时间"+day.toString());
+
         OldpersonInfo oldperson= OldpersonInfo.builder()
                 .username(request.getUsername())
                 .gender(request.getGender())
@@ -78,7 +86,6 @@ public class OldpersonController {
                 .REMOVE("0")
                 .build();
         System.out.println("开始插表");
-        BaseResponse reponse=new BaseResponse();
 
         oldperson.setID(getIDNumber()+1);
         oldperson.setCheckin_date(Utils.strToDateLong(request.getCheckin_date()));
@@ -89,9 +96,9 @@ public class OldpersonController {
         oldperson.setCREATEBY(request.getCREATEBY());
         oldpersonInfoService.save(oldperson);
         System.out.println(request.getCREATEBY()+"加入成功");
-        reponse.setCode(1);
-        reponse.setMsg("add one oldperson successfully!!");
-        return reponse;
+        response.setCode(1);
+        response.setMsg("add one oldperson successfully!!");
+        return response;
     }
 
     //修改老人信息
@@ -156,10 +163,13 @@ public class OldpersonController {
     @RequestMapping("/removeOldPerson")
     public BaseResponse remove(@RequestBody OldpersonRequest request) {
 
+        Date day=new Date();
         BaseResponse response=new BaseResponse();
+
         OldpersonInfo oldperson=oldpersonInfoService.findOldpersonByID(request.getID());
         System.out.println(oldperson.getUsername());
         oldperson.setREMOVE("1");
+        oldperson.setCheckout_date(day);
         oldpersonInfoService.save(oldperson);
         response.setCode(1);
         response.setMsg("delete oldperson successfully!!");
