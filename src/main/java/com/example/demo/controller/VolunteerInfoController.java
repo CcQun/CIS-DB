@@ -1,16 +1,29 @@
 package com.example.demo.controller;
 
+import com.example.demo.core.Utils;
+import com.example.demo.core.request.EmployeeRequest;
+import com.example.demo.core.request.VolunteerRequest;
+import com.example.demo.core.response.BaseResponse;
+import com.example.demo.core.response.ListResponse;
+import com.example.demo.db.model.EmployeeInfo;
+import com.example.demo.db.model.VolunteerInfo;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
- * @Author CcQun
+ * @Author CcQun zsm
  * @Date 2020/6/30 17:07
  */
 @RestController()
-@RequestMapping("/volunteerInfo")
+@RequestMapping("/volunteer")
 public class VolunteerInfoController {
     @Autowired
     private final EmployeeInfoService employeeInfoService;
@@ -33,5 +46,121 @@ public class VolunteerInfoController {
         this.oldpersonInfoService = oldpersonInfoService;
         this.sysUserService = sysUserService;
         this.volunteerInfoService = volunteerInfoService;
+    }
+
+    //录入义工信息/新增
+    @RequestMapping("/addVolunteer")
+    public BaseResponse addVolunteer(@RequestBody VolunteerRequest request) throws ParseException {
+
+        Date day=new Date();
+        System.out.println("加入义工记录一条");
+        System.out.println("创建时间"+day.toString());
+        BaseResponse response=new BaseResponse();
+        VolunteerInfo temp=volunteerInfoService.findVolunteerById_card(request.getId_card());
+        if(temp!=null&&temp.getREMOVE().equals("0")){
+            response.setCode(0);
+            response.setMsg("this volunteer has already been in this system!!");
+            return response;
+        }
+        VolunteerInfo volunteer= VolunteerInfo.builder()
+                .id(getIDNumber()+1)
+                .name(request.getName())
+                .gender(request.getGender())
+                .phone(request.getPhone())
+                .id_card(request.getId_card())
+                .birthday(Utils.strToDateLong(request.getBirthday()))
+                .checkin_date(Utils.strToDateLong(request.getCheckin_date()))
+                .DESCRIPTION(request.getDESCRIPTION())
+                .ISACTIVE(request.getISACTIVE())
+                .CREATED(day)
+                .CREATEBY(request.getCREATEBY())
+                .REMOVE("0")
+                .build();
+
+        volunteerInfoService.save(volunteer);
+        System.out.println(request.getCREATEBY()+"加入成功");
+        response.setCode(1);
+        response.setMsg("add one oldperson successfully!!");
+        return response;
+    }
+    //修改义工信息
+    @RequestMapping("/editVolunteer")
+    public BaseResponse editVolunteer(@RequestBody VolunteerRequest request) {
+
+        Date day=new Date();
+        // EmployeeInfo employee= EmployeeInfo.builder()
+        VolunteerInfo volunteer= volunteerInfoService.findVolunteerByID(request.getId());
+        System.out.println(volunteer.getName());
+
+        volunteer.setGender(request.getGender());
+        volunteer.setPhone(request.getPhone());
+        volunteer.setId_card(request.getId_card());
+        volunteer.setBirthday(Utils.strToDateLong(request.getBirthday()));
+        volunteer.setCheckin_date(Utils.strToDateLong(request.getCheckin_date()));
+        volunteer.setDESCRIPTION(request.getDESCRIPTION());
+        volunteer.setISACTIVE(request.getISACTIVE());
+        volunteer.setUPDATEBY(request.getUPDATEBY());
+        volunteer.setUPDATED(day);
+
+        volunteerInfoService.save(volunteer);
+        BaseResponse reponse=new BaseResponse();
+
+        reponse.setCode(1);
+        reponse.setMsg("edit volunteer successfully!!");
+        return reponse;
+    }
+    //查看义工信息
+    @RequestMapping("/queryVolunteer")
+    public ListResponse queryVolunteer() {
+        System.out.println("查询开始");
+
+        List<VolunteerInfo> volunteers = volunteerInfoService.findAll();
+        List<VolunteerInfo> vols = new ArrayList<>();
+        ListResponse response=new ListResponse();
+        for(int i=0;i<volunteers.size();i++){
+            VolunteerInfo volunteer=volunteers.get(i);
+            if(volunteer.getREMOVE().equals("1")){
+                continue;
+            }
+            vols.add(volunteer);
+        }
+
+        response.setCode(1);
+        response.setMsg("query volunteer successfully!!");
+        response.setData(vols);
+        System.out.println("查询结束");
+        return response;
+    }
+
+    //删除义工
+    @RequestMapping("/removeVolunteer")
+    public BaseResponse removeVolunteer(@RequestBody VolunteerRequest request) {
+
+
+        Date day = new Date();
+        BaseResponse response=new BaseResponse();
+        VolunteerInfo volunteer=volunteerInfoService.findVolunteerByID(request.getId());
+        System.out.println(volunteer.getName());
+        volunteer.setREMOVE("1");
+        volunteer.setCheckout_date(day);
+        volunteerInfoService.save(volunteer);
+        response.setCode(1);
+        response.setMsg("delete volunteer successfully!!");
+        return response;
+    }
+
+
+
+
+    //获得最大id
+    public Integer getIDNumber() {
+        List<VolunteerInfo> volunteers = volunteerInfoService.findAll();
+        Integer idNumber = 0;
+        for (int i = 0; i < volunteers.size(); i++) {
+            if (volunteers.get(i).getId() > idNumber) {
+                idNumber = volunteers.get(i).getId();
+            }
+        }
+        return idNumber;
     }
 }
