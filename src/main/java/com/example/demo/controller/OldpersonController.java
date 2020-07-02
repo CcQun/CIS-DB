@@ -206,18 +206,21 @@ public class OldpersonController {
             for(int i=0;i<total;i++){
                 OldpersonInfo oldpersonInfo = list.get(i);
                 int age= Utils.getAge(oldpersonInfo.getBirthday());
+
+                //统计年龄分布
                 if(age<60){
                     level1++;
                 }else if(age>=60&&age<70){
                     level2++;
+                }else{
+                    level3++;
                 }
+                //统计性别
                 if(oldpersonInfo.getGender().equals("男")){
                     male++;
                 }else{
                     female++;
                 }
-
-
             }
         }
         response.setTotalNumber(total);
