@@ -8,6 +8,7 @@ import com.example.demo.core.request.RegisterRequest;
 import com.example.demo.core.response.BaseResponse;
 import com.example.demo.core.response.DataResponse;
 import com.example.demo.core.response.ListResponse;
+import com.example.demo.db.model.OldpersonInfo;
 import com.example.demo.db.model.SysUser;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,18 @@ public class SysUserController {
         this.volunteerInfoService = volunteerInfoService;
     }
 
+    //获得最大id
+    public Integer getIDNumber() {
+        List<SysUser> users = sysUserService.findAll();
+        Integer idNumber = 0;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getID() > idNumber) {
+                idNumber = users.get(i).getID();
+            }
+        }
+        return idNumber;
+    }
+
     @RequestMapping("/login")
     public ListResponse login(@RequestBody LoginRequest request){
         ListResponse response = new ListResponse();
@@ -86,6 +99,7 @@ public class SysUserController {
 //        System.out.println(MD5Password+"-111");
 
         SysUser user = SysUser.builder()
+                .ID(getIDNumber()+1)
                 .UserName(request.getUserName())
                 .REAL_NAME(request.getREAL_NAME())
                 .SEX(request.getSEX())
