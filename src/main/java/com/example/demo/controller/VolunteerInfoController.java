@@ -202,9 +202,6 @@ public class VolunteerInfoController {
         return response;
     }
 
-
-
-
     //获得最大id
     public Integer getIDNumber() {
         List<VolunteerInfo> volunteers = volunteerInfoService.findAll();

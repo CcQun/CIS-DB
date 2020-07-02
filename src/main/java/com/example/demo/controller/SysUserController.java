@@ -94,7 +94,7 @@ public class SysUserController {
     @RequestMapping("/register")
     public BaseResponse register(@RequestBody RegisterRequest request){
         BaseResponse response = new BaseResponse();
-//        System.out.println(request.toString());
+        System.out.println(request.toString());
         String MD5Password = Utils.getMD5(request.getPassword());
 //        System.out.println(MD5Password+"-111");
 
