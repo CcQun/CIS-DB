@@ -7,4 +7,5 @@ import com.example.demo.db.model.OldpersonInfo;
  * @Date 2020/6/29 21:03
  */
 public interface OldpersonInfoMapper extends BaseMapper<OldpersonInfo,Integer> {
+
 }

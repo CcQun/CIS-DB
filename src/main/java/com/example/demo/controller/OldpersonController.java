@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,7 +58,6 @@ public class OldpersonController {
         System.out.println("加入老人");
         System.out.println("创建时间"+day.toString());
         OldpersonInfo oldperson= OldpersonInfo.builder()
-                .ID(getIDNumber()+1)
                 .username(request.getUsername())
                 .gender(request.getGender())
                 .phone(request.getPhone())
@@ -75,21 +75,17 @@ public class OldpersonController {
                 .health_state(request.getHealth_state())
                 .DESCRIPTION(request.getDESCRIPTION())
                 .ISACTIVE(request.getISACTIVE())
+                .REMOVE("0")
                 .build();
         System.out.println("开始插表");
         BaseResponse reponse=new BaseResponse();
-        List<OldpersonInfo> oldpersons = oldpersonInfoService.findAll();
-        if(oldpersons.size()>0){
-            reponse.setCode(0);
-            reponse.setMsg("add one oldperson failed, this old person already exists!!");
-            System.out.println("加入失败");
-            return reponse;
-        }
+
+        oldperson.setID(getIDNumber()+1);
         oldperson.setCheckin_date(Utils.strToDateLong(request.getCheckin_date()));
         oldperson.setCREATED(day);
-        System.out.println(request.getCREATEBY());
-        System.out.println(request.getDESCRIPTION());
-        System.out.println(request.getISACTIVE());
+//        System.out.println(request.getCREATEBY());
+//        System.out.println(request.getDESCRIPTION());
+//        System.out.println(request.getISACTIVE());
         oldperson.setCREATEBY(request.getCREATEBY());
         oldpersonInfoService.save(oldperson);
         System.out.println(request.getCREATEBY()+"加入成功");
@@ -103,34 +99,71 @@ public class OldpersonController {
     public BaseResponse editOldPerson(@RequestBody OldpersonRequest request) {
 
         Date day=new Date();
-        OldpersonInfo oldperson= OldpersonInfo.builder()
-                .ID(request.getID())
-                .gender(request.getGender())
-                .phone(request.getPhone())
-                .id_card(request.getId_card())
-                .birthday(Utils.strToDateLong(request.getBirthday()))
-                .checkin_date(Utils.strToDateLong(request.getCheckin_date()))
-                .room_number(request.getRoom_number())
-                .firstguardian_name(request.getFirstguardian_name())
-                .firstguardian_relationship(request.getFirstguardian_relationship())
-                .firstguardian_phone(request.getFirstguardian_phone())
-                .firstguardian_wechat(request.getFirstguardian_wechat())
-                .secondguardian_name(request.getSecondguardian_name())
-                .secondguardian_relationship(request.getSecondguardian_relationship())
-                .secondguardian_phone(request.getSecondguardian_phone())
-                .secondguardian_wechat(request.getSecondguardian_wechat())
-                .health_state(request.getHealth_state())
-                .DESCRIPTION(request.getDESCRIPTION())
-                .ISACTIVE(request.getISACTIVE())
-                .UPDATED(day)
-                .UPDATEBY(request.getCREATEBY())
-                .build();
-        oldpersonInfoService.save(oldperson);
+        OldpersonInfo oldperson= oldpersonInfoService.findOldpersonByID(request.getID());
+        System.out.println(oldperson.getUsername());
+        oldperson.setGender(request.getGender());
+        oldperson.setPhone(request.getPhone());
+        oldperson.setId_card(request.getId_card());
+        oldperson.setBirthday(Utils.strToDateLong(request.getBirthday()));
+        oldperson.setCheckin_date(Utils.strToDateLong(request.getCheckin_date()));
+        oldperson.setRoom_number(request.getRoom_number());
+        oldperson.setFirstguardian_name(request.getFirstguardian_name());
+        oldperson.setFirstguardian_phone(request.getFirstguardian_phone());
+        oldperson.setFirstguardian_relationship(request.getFirstguardian_relationship());
+        oldperson.setFirstguardian_wechat(request.getFirstguardian_wechat());
+        oldperson.setSecondguardian_name(request.getSecondguardian_name());
+        oldperson.setSecondguardian_phone(request.getSecondguardian_relationship());
+        oldperson.setSecondguardian_phone(request.getSecondguardian_phone());
+        oldperson.setFirstguardian_wechat(request.getSecondguardian_wechat());
+        oldperson.setHealth_state(request.getHealth_state());
+        oldperson.setDESCRIPTION(request.getDESCRIPTION());
+        oldperson.setISACTIVE(request.getISACTIVE());
+        oldperson.setUPDATEBY(request.getUPDATEBY());
+        oldperson.setUPDATED(day);
 
+        oldpersonInfoService.save(oldperson);
         BaseResponse reponse=new BaseResponse();
+
         reponse.setCode(1);
         reponse.setMsg("edit oldperson successfully!!");
         return reponse;
+    }
+
+    //查看老人信息
+    @RequestMapping("/queryOldPerson")
+    public ListResponse queryOldPerson() {
+        System.out.println("查询开始");
+
+        List<OldpersonInfo> oldpersons = oldpersonInfoService.findAll();
+        List<OldpersonInfo> olds = new ArrayList<>();
+        ListResponse response=new ListResponse();
+        for(int i=0;i<oldpersons.size();i++){
+            OldpersonInfo oldperson=oldpersons.get(i);
+            if(oldperson.getREMOVE().equals("1")){
+                continue;
+            }
+            olds.add(oldperson);
+        }
+
+        response.setCode(1);
+        response.setMsg("query oldperson successfully!!");
+        response.setData(olds);
+        System.out.println("查询结束");
+        return response;
+    }
+
+    //删除老人信息
+    @RequestMapping("/removeOldPerson")
+    public BaseResponse remove(@RequestBody OldpersonRequest request) {
+
+        BaseResponse response=new BaseResponse();
+        OldpersonInfo oldperson=oldpersonInfoService.findOldpersonByID(request.getID());
+        System.out.println(oldperson.getUsername());
+        oldperson.setREMOVE("1");
+        oldpersonInfoService.save(oldperson);
+        response.setCode(1);
+        response.setMsg("delete oldperson successfully!!");
+        return response;
     }
 
     //获得最大id
