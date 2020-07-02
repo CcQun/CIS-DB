@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Author CcQun zsm
+ * @Author CcQun zsm fyl
  * @Date 2020/6/30 17:05
  */
 @RestController()
@@ -188,7 +188,7 @@ public class OldpersonController {
         return idNumber;
     }
 
-    @RequestMapping("/statOlePerson")//统计老人年龄分布，性别比例
+    @RequestMapping("/statOldPerson")//统计老人年龄分布，性别比例
     public OldStatResponse statOlePerson() throws Exception {
         OldStatResponse response = new OldStatResponse();
         List<OldpersonInfo> list = oldpersonInfoService.findAll();

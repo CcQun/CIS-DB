@@ -23,7 +23,7 @@ import java.util.List;
 import static com.example.demo.db.service.SysUserService.*;
 
 /**
- * @Author CcQun
+ * @Author CcQun wyy
  * @Date 2020/6/30 17:07
  */
 @RestController()
