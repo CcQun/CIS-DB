@@ -29,12 +29,12 @@ public class VolunteerInfoService extends BaseService<VolunteerInfo,Integer, Vol
     public VolunteerInfo findVolunteerById_card(String id_card)
     {
         VolunteerInfo volunteer= VolunteerInfo.builder()
-                .id_card(id_card).build();
+                .id_card(id_card).REMOVE("0").build();
 
         Example<VolunteerInfo> example = Example.of(volunteer);
         List<VolunteerInfo> list = mapper.findAll(example);
         if(list.size()>0){
-            return list.get(list.size()-1);
+            return list.get(0);
         }else{
             return null;
         }

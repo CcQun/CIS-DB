@@ -56,7 +56,7 @@ public class OldpersonController {
 
         BaseResponse response=new BaseResponse();
         OldpersonInfo temp=oldpersonInfoService.findOldpersonById_card(request.getId_card());
-        if(temp!=null&&temp.getREMOVE().equals("0")){
+        if(temp!=null){
             response.setCode(0);
             response.setMsg("this oldpersonn has already in this system!!");
             return response;
