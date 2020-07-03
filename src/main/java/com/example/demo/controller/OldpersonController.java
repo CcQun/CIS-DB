@@ -53,7 +53,6 @@ public class OldpersonController {
     //录入老人信息/新增
     @RequestMapping("/addOldPerson")
     public BaseResponse addOldPerson(@RequestBody OldpersonRequest request) throws ParseException {
-
         BaseResponse response=new BaseResponse();
         OldpersonInfo temp=oldpersonInfoService.findOldpersonById_card(request.getId_card());
         if(temp!=null){
@@ -197,6 +196,7 @@ public class OldpersonController {
         int level1=0;
         int level2=0;
         int level3=0;
+        int[] a=new int[4];
         int total=list.size();
         if(total==0){
             response.setMsg("数据库中无老人信息");
@@ -207,6 +207,13 @@ public class OldpersonController {
                 OldpersonInfo oldpersonInfo = list.get(i);
                 int age= Utils.getAge(oldpersonInfo.getBirthday());
 
+                //统计健康状况
+                String[] s = oldpersonInfo.getHealth_state().split("_");
+                for(int j=0;j<4;j++){
+                    if(s[j].equals("1")){
+                        a[j]++;
+                    }
+                }
                 //统计年龄分布
                 if(age<60){
                     level1++;
@@ -229,6 +236,10 @@ public class OldpersonController {
         response.setNumberOfL1(level1);
         response.setNumberOfL2(level2);
         response.setNumberOfL3(level3);
+        response.setNumberOfA(a[0]);
+        response.setNumberOfB(a[1]);
+        response.setNumberOfC(a[2]);
+        response.setNumberOfD(a[3]);
         response.setCode(1);
         response.setMsg("统计信息返回");
         return response;

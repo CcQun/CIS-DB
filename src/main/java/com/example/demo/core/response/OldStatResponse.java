@@ -41,4 +41,25 @@ public class OldStatResponse extends BaseResponse{
      * 男性数量
      */
     private int numberOfMa;
+
+    /**
+     * 心脏病人数
+     */
+    private int numberOfA;
+
+    /**
+     * 糖尿病数量
+     */
+    private int numberOfB;
+
+    /**
+     * 高血压数量
+     */
+    private int numberOfC;
+
+    /**
+     * 高血脂数量
+     */
+    private int numberOfD;
+
 }
