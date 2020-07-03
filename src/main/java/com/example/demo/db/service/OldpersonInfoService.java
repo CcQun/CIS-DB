@@ -27,7 +27,7 @@ public class OldpersonInfoService extends BaseService<OldpersonInfo,Integer, Old
     public OldpersonInfo findOldpersonById_card(String id_card)
     {
         OldpersonInfo oldperson= OldpersonInfo.builder()
-                .id_card(id_card).build();
+                .id_card(id_card).REMOVE("0").build();
 
         Example<OldpersonInfo> example = Example.of(oldperson);
         List<OldpersonInfo> list = mapper.findAll(example);

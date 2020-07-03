@@ -57,7 +57,7 @@ public class VolunteerInfoController {
         System.out.println("创建时间"+day.toString());
         BaseResponse response=new BaseResponse();
         VolunteerInfo temp=volunteerInfoService.findVolunteerById_card(request.getId_card());
-        if(temp!=null&&temp.getREMOVE().equals("0")){
+        if(temp!=null){
             response.setCode(0);
             response.setMsg("this volunteer has already been in this system!!");
             return response;

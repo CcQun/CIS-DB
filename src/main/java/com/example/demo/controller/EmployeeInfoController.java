@@ -61,10 +61,9 @@ public class EmployeeInfoController {
         //System.out.println("查找结束"+temp.toString());
         boolean isExist=false;
         if(temp!=null){
-            System.out.println("查找结束"+temp.toString());
-            if(temp.getREMOVE().equals("0")){
+
                 isExist=true;
-            }
+
         }
         if(!isExist){
             EmployeeInfo employee= EmployeeInfo.builder()
@@ -85,7 +84,7 @@ public class EmployeeInfoController {
             employeeInfoService.save(employee);
             System.out.println(request.getCREATEBY()+"加入成功");
             response.setCode(1);
-            response.setMsg("add one oldperson successfully!!");
+            response.setMsg("add one emloyee successfully!!");
         }
         else{
             response.setCode(0);
