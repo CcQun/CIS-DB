@@ -8,10 +8,11 @@ import com.example.demo.core.crp.OldStatResponse;
 import com.example.demo.db.model.OldpersonInfo;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.ClassUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -184,7 +185,7 @@ public class OldpersonController {
         return idNumber;
     }
 
-    @RequestMapping("/statOldPerson")//统计老人年龄分布，性别比例
+    @RequestMapping("/statOldPerson")//统计老人年龄分布，性别比例，健康状况
     public OldStatResponse statOlePerson() throws Exception {
         OldStatResponse response = new OldStatResponse();
         List<OldpersonInfo> list = oldpersonInfoService.findAll();
@@ -203,7 +204,10 @@ public class OldpersonController {
             for(int i=0;i<total;i++){
                 OldpersonInfo oldpersonInfo = list.get(i);
                 int age= Utils.getAge(oldpersonInfo.getBirthday());
-
+                
+                if(oldpersonInfo.getREMOVE().equals("1")){
+                    continue;
+                }
                 //统计健康状况
                 String[] s = oldpersonInfo.getHealth_state().split("_");
                 for(int j=0;j<4;j++){
@@ -239,6 +243,44 @@ public class OldpersonController {
         response.setNumberOfD(a[3]);
         response.setCode(1);
         response.setMsg("统计信息返回");
+        return response;
+    }
+
+    //老人头像设定
+    @RequestMapping(value = "/addPhotoOP")
+    public BaseResponse addPhotoOP(@RequestParam(value = "file") MultipartFile file,@RequestParam(value = "user") String id) throws IOException {
+        BaseResponse response = new BaseResponse();
+        System.out.println(id);
+        OldpersonInfo oldpersonInfo = oldpersonInfoService.findOldpersonById_card(id);
+        String base = System.getProperty("user.dir")+"\\src\\main\\resources\\static\\images\\";
+
+        String path=base+oldpersonInfo.getID().toString()+"\\";
+        String fileName=oldpersonInfo.getID().toString()+".jpg";
+        System.out.println(path+fileName);
+        //设置头像路径
+        oldpersonInfo.setImgset_dir("images/"+oldpersonInfo.getID().toString()+"/"+oldpersonInfo.getID().toString()+".jpg");
+
+        if(file!=null&&id!=null){
+            InputStream in = file.getInputStream();
+            File mkdir =new File(path);
+            if(!mkdir.exists()){
+                mkdir.mkdirs();
+            }
+            FileOutputStream os = new FileOutputStream(mkdir.getPath()+"\\"+fileName);
+            int len=0;
+            while((len = in.read())!=-1){
+                os.write(len);
+            }
+            oldpersonInfoService.save(oldpersonInfo);
+            os.flush();
+            in.close();
+            os.close();
+        }else{
+            response.setMsg("失败");
+            response.setCode(0);
+        }
+        response.setCode(1);
+        response.setMsg("照片录入成功");
         return response;
     }
 }
