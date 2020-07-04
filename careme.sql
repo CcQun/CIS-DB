@@ -147,8 +147,8 @@ DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user`
 (
     `ID`          int(11)     NOT NULL AUTO_INCREMENT,
-    `ORG_ID`      int(11)     DEFAULT NULL,
-    `CLIENT_ID`   int(11)     DEFAULT NULL,
+    `ORG_ID`      int(11)       DEFAULT NULL,
+    `CLIENT_ID`   int(11)       DEFAULT NULL,
     `UserName`    varchar(50) NOT NULL COMMENT '用户名',
     `Password`    varchar(50)   DEFAULT NULL COMMENT '密码',
     `REAL_NAME`   varchar(50)   DEFAULT NULL,
@@ -174,11 +174,22 @@ CREATE TABLE `sys_user`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 62
   DEFAULT CHARSET = utf8;
-INSERT INTO `sys_user` VALUES (1, NULL, NULL, 'zsm', '3B6302C1ED258F38542D468F7111C5FC', '周诗梦', '女', '7868@163.com', '123', '12345', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_user` VALUES (2, NULL, NULL, 'wyy', 'E10ADC3949BA59ABBE56E057F20F883E', '吴瑛瑛', '女', '121@163.com', '123', '12345', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `volunteer_info` VALUES (1, NULL, NULL, '符永乐', '男', '123', '460031199912166111', '1999-12-16 00:00:00', '2020-07-02 10:23:00', NULL, NULL, NULL, '优秀义工', '不知道', '2020-07-03 13:58:37', 2, NULL, NULL, '0');
-INSERT INTO `employee_info` VALUES (1, NULL, NULL, '崔超群', '男', '123', '370126199907284210', '1999-07-28 00:00:00', '2020-07-04 14:57:00', NULL, NULL, NULL, '优秀工作人员', '不知道', '2020-07-02 10:38:45', 1, NULL, NULL, '0');
-INSERT INTO `oldperson_info` VALUES (1, NULL, NULL, '李程遥', '男', '123', '220203199904264810', '1999-04-26 00:00:00', '2020-07-20 00:00:00', NULL, NULL, NULL, '12', 'aaa', '儿子', '11111111111', 'aaaaaa', 'aaa', '儿子', '11111111111', 'aaaaaa', '好', '好得很', '不知道', '2020-07-02 21:34:59', 1, NULL, NULL, '0');
+INSERT INTO `sys_user`
+VALUES (1, NULL, NULL, 'zsm', '3B6302C1ED258F38542D468F7111C5FC', '周诗梦', '女', '7868@163.com', '123', '12345', NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_user`
+VALUES (2, NULL, NULL, 'wyy', 'E10ADC3949BA59ABBE56E057F20F883E', '吴瑛瑛', '女', '121@163.com', '123', '12345', NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `volunteer_info`
+VALUES (1, NULL, NULL, '符永乐', '男', '123', '460031199912166111', '1999-12-16 00:00:00', '2020-07-02 10:23:00', NULL,
+        NULL, NULL, '优秀义工', '不知道', '2020-07-03 13:58:37', 2, NULL, NULL, '0');
+INSERT INTO `employee_info`
+VALUES (1, NULL, NULL, '崔超群', '男', '123', '370126199907284210', '1999-07-28 00:00:00', '2020-07-04 14:57:00', NULL,
+        NULL, NULL, '优秀工作人员', '不知道', '2020-07-02 10:38:45', 1, NULL, NULL, '0');
+INSERT INTO `oldperson_info`
+VALUES (1, NULL, NULL, '李程遥', '男', '123', '220203199904264810', '1999-04-26 00:00:00', '2020-07-20 00:00:00', NULL,
+        NULL, NULL, '12', 'aaa', '儿子', '11111111111', 'aaaaaa', 'aaa', '儿子', '11111111111', 'aaaaaa', '好', '好得很', '不知道',
+        '2020-07-02 21:34:59', 1, NULL, NULL, '0');
 
 
 /*!40101 SET character_set_client = @saved_cs_client */;
