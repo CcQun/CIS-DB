@@ -5,7 +5,7 @@ import com.example.demo.core.request.EmployeeRequest;
 import com.example.demo.core.response.BaseResponse;
 import com.example.demo.core.response.ListResponse;
 import com.example.demo.db.model.EmployeeInfo;
-import com.example.demo.core.response.StatResponse;
+import com.example.demo.core.crp.StatResponse;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

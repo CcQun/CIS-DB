@@ -1,5 +1,6 @@
-package com.example.demo.core.response;
+package com.example.demo.core.crp;
 
+import com.example.demo.core.response.BaseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OldStatResponse extends BaseResponse{
+public class OldStatResponse extends BaseResponse {
 
     private int totalNumber;
 
