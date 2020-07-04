@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.demo.db.service.SysUserService.*;
@@ -97,6 +98,7 @@ public class SysUserController {
         System.out.println(request.toString());
         String MD5Password = Utils.getMD5(request.getPassword());
 //        System.out.println(MD5Password+"-111");
+        Date time = new Date();
 
         SysUser user = SysUser.builder()
                 .ID(getIDNumber()+1)
@@ -107,6 +109,7 @@ public class SysUserController {
                 .PHONE(request.getPHONE())
                 .MOBILE(request.getMOBILE())
                 .Password(MD5Password)
+                .CREATED(time)
                 .build();
 //        System.out.println(user.getPassword()+"---------");
         List<SysUser> list = sysUserService.findAllByUserName(request.getUserName());
@@ -139,6 +142,7 @@ public class SysUserController {
     public BaseResponse edit(@RequestBody EditSysUserRequest request){
         BaseResponse response = new BaseResponse();
 //        System.out.println(request.toString());
+        Date time = new Date();
 
         List<SysUser> list = sysUserService.findAllByUserName(request.getUserName());
         SysUser user = list.get(0);
@@ -148,6 +152,7 @@ public class SysUserController {
         user.setEMAIL(request.getEMAIL());
         user.setPHONE(request.getPHONE());
         user.setMOBILE(request.getMOBILE());
+        user.setUPDATED(time);
 
         sysUserService.getMapper().save(user);
 
