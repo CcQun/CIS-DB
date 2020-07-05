@@ -165,7 +165,7 @@ public class VolunteerInfoController {
     //获得最大id
     public Integer getIDNumber() {
         List<VolunteerInfo> volunteers = volunteerInfoService.findAll();
-        Integer idNumber = 0;
+        Integer idNumber = 3000;
         for (int i = 0; i < volunteers.size(); i++) {
             if (volunteers.get(i).getId() > idNumber) {
                 idNumber = volunteers.get(i).getId();

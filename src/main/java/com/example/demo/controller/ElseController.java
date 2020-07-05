@@ -61,7 +61,7 @@ public class ElseController {
         for(int i=0;i<old_list.size();i++){
             if(old_list.get(i).getREMOVE().equals("0")){
                 PeopleInfo p=new PeopleInfo();
-                p.setId_card(old_list.get(i).getId_card());
+                p.setId_card(old_list.get(i).getID());
                 p.setName(old_list.get(i).getUsername());
                 p.setType("old_people");
                 list.add(p);
@@ -72,7 +72,7 @@ public class ElseController {
         for(int i=0;i<employee_list.size();i++){
             if(employee_list.get(i).getREMOVE().equals("0")){
                 PeopleInfo p=new PeopleInfo();
-                p.setId_card(employee_list.get(i).getId_card());
+                p.setId_card(employee_list.get(i).getId());
                 p.setName(employee_list.get(i).getUsername());
                 p.setType("employee");
                 list.add(p);
@@ -83,7 +83,7 @@ public class ElseController {
         for(int i=0;i<volunteer_list.size();i++){
             if(volunteer_list.get(i).getREMOVE().equals("0")){
                 PeopleInfo p=new PeopleInfo();
-                p.setId_card(volunteer_list.get(i).getId_card());
+                p.setId_card(volunteer_list.get(i).getId());
                 p.setName(volunteer_list.get(i).getName());
                 p.setType("volunteer");
                 list.add(p);

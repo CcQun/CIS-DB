@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 public class PeopleInfo {
-    private String id_card;
+    private Integer id_card;
     private String name;
     private String type;
 }

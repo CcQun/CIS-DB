@@ -182,7 +182,7 @@ public class OldpersonController {
     //获得最大id
     public Integer getIDNumber() {
         List<OldpersonInfo> oldpersons = oldpersonInfoService.findAll();
-        Integer idNumber = 0;
+        Integer idNumber = 1000;
         for (int i = 0; i < oldpersons.size(); i++) {
             if (oldpersons.get(i).getID() > idNumber) {
                 idNumber = oldpersons.get(i).getID();

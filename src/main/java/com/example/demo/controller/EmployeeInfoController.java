@@ -174,7 +174,7 @@ public class EmployeeInfoController {
     //获得最大id
     public Integer getIDNumber() {
         List<EmployeeInfo> employees = employeeInfoService.findAll();
-        Integer idNumber = 0;
+        Integer idNumber = 2000;
         for (int i = 0; i < employees.size(); i++) {
             if (employees.get(i).getId() > idNumber) {
                 idNumber = employees.get(i).getId();
