@@ -2,13 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.core.Utils;
 import com.example.demo.core.request.EmployeeRequest;
-import com.example.demo.core.request.OldpersonRequest;
 import com.example.demo.core.response.BaseResponse;
 import com.example.demo.core.response.ListResponse;
 import com.example.demo.db.model.EmployeeInfo;
 import com.example.demo.core.crp.StatResponse;
-import com.example.demo.core.response.StatResponse;
-import com.example.demo.db.model.OldpersonInfo;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,11 +42,15 @@ public class EmployeeInfoController {
     @Autowired
     private final VolunteerInfoService volunteerInfoService;
 
+    @Value("${web.upload-path}")
+    private String imgPath;
+
+
     public EmployeeInfoController(EmployeeInfoService employeeInfoService,
-                          EventInfoService eventInfoService,
-                          OldpersonInfoService oldpersonInfoService,
-                          SysUserService sysUserService,
-                          VolunteerInfoService volunteerInfoService) {
+                                  EventInfoService eventInfoService,
+                                  OldpersonInfoService oldpersonInfoService,
+                                  SysUserService sysUserService,
+                                  VolunteerInfoService volunteerInfoService) {
         this.employeeInfoService = employeeInfoService;
         this.eventInfoService = eventInfoService;
         this.oldpersonInfoService = oldpersonInfoService;
@@ -63,20 +64,20 @@ public class EmployeeInfoController {
 
         Date day = new Date();
         System.out.println("加入工作人员");
-        System.out.println("创建时间"+day.toString());
-        BaseResponse response=new BaseResponse();
+        System.out.println("创建时间" + day.toString());
+        BaseResponse response = new BaseResponse();
 
-        EmployeeInfo temp=employeeInfoService.findEmployeeById_card(request.getId_card());
+        EmployeeInfo temp = employeeInfoService.findEmployeeById_card(request.getId_card());
         //System.out.println("查找结束"+temp.toString());
-        boolean isExist=false;
-        if(temp!=null){
+        boolean isExist = false;
+        if (temp != null) {
 
-                isExist=true;
+            isExist = true;
 
         }
-        if(!isExist){
-            EmployeeInfo employee= EmployeeInfo.builder()
-                    .id(getIDNumber()+1)
+        if (!isExist) {
+            EmployeeInfo employee = EmployeeInfo.builder()
+                    .id(getIDNumber() + 1)
                     .username(request.getUsername())
                     .gender(request.getGender())
                     .phone(request.getPhone())
@@ -91,11 +92,10 @@ public class EmployeeInfoController {
                     .build();
 
             employeeInfoService.save(employee);
-            System.out.println(request.getCREATEBY()+"加入成功");
+            System.out.println(request.getCREATEBY() + "加入成功");
             response.setCode(1);
             response.setMsg("add one emloyee successfully!!");
-        }
-        else{
+        } else {
             response.setCode(0);
             response.setMsg("this empoyee has already been in system!!");
         }
@@ -107,9 +107,9 @@ public class EmployeeInfoController {
     @RequestMapping("/editEmployee")
     public BaseResponse editEmployee(@RequestBody EmployeeRequest request) {
 
-        Date day=new Date();
-       // EmployeeInfo employee= EmployeeInfo.builder()
-        EmployeeInfo employee= employeeInfoService.findEmployeeByID(request.getId());
+        Date day = new Date();
+        // EmployeeInfo employee= EmployeeInfo.builder()
+        EmployeeInfo employee = employeeInfoService.findEmployeeByID(request.getId());
         System.out.println(employee.getUsername());
 
         employee.setGender(request.getGender());
@@ -123,7 +123,7 @@ public class EmployeeInfoController {
         employee.setUPDATED(day);
 
         employeeInfoService.save(employee);
-        BaseResponse reponse=new BaseResponse();
+        BaseResponse reponse = new BaseResponse();
 
         reponse.setCode(1);
         reponse.setMsg("edit employee successfully!!");
@@ -138,10 +138,10 @@ public class EmployeeInfoController {
 
         List<EmployeeInfo> employees = employeeInfoService.findAll();
         List<EmployeeInfo> employ = new ArrayList<>();
-        ListResponse response=new ListResponse();
-        for(int i=0;i<employees.size();i++){
-            EmployeeInfo employee=employees.get(i);
-            if(employee.getREMOVE().equals("1")){
+        ListResponse response = new ListResponse();
+        for (int i = 0; i < employees.size(); i++) {
+            EmployeeInfo employee = employees.get(i);
+            if (employee.getREMOVE().equals("1")) {
                 continue;
             }
             employ.add(employee);
@@ -160,8 +160,8 @@ public class EmployeeInfoController {
 
         // EmployeeInfo employee= EmployeeInfo.builder()
         Date day = new Date();
-        BaseResponse response=new BaseResponse();
-        EmployeeInfo employee=employeeInfoService.findEmployeeByID(request.getId());
+        BaseResponse response = new BaseResponse();
+        EmployeeInfo employee = employeeInfoService.findEmployeeByID(request.getId());
         System.out.println(employee.getUsername());
         employee.setREMOVE("1");
         employee.setResign_date(day);
@@ -187,35 +187,35 @@ public class EmployeeInfoController {
     @RequestMapping("/statEmployee")
     public StatResponse statEmployee() throws Exception {
         StatResponse response = new StatResponse();
-        List<EmployeeInfo> list =  employeeInfoService.findAll();
-        int female=0;
-        int male=0;
-        int level1=0;
-        int level2=0;
-        int level3=0;
-        int total=list.size();
-        if(total<=0){
+        List<EmployeeInfo> list = employeeInfoService.findAll();
+        int female = 0;
+        int male = 0;
+        int level1 = 0;
+        int level2 = 0;
+        int level3 = 0;
+        int total = list.size();
+        if (total <= 0) {
             response.setMsg("数据库中无工作人员信息");
             response.setCode(0);
             return response;
-        }else{
-            for(int i=0;i<total;i++){
+        } else {
+            for (int i = 0; i < total; i++) {
                 EmployeeInfo employeeInfo = list.get(i);
                 int age = Utils.getAge(employeeInfo.getBirthday());
-                System.out.println(employeeInfo.getUsername()+"_age:"+age);
+                System.out.println(employeeInfo.getUsername() + "_age:" + age);
                 //统计年龄分布
-                if(age<30){
+                if (age < 30) {
                     level1++;
-                }else if(age>=30&&age<40){
+                } else if (age >= 30 && age < 40) {
                     level2++;
-                }else{
+                } else {
                     level3++;
                 }
 
                 //统计性别
-                if(employeeInfo.getGender().equals("男")){
+                if (employeeInfo.getGender().equals("男")) {
                     male++;
-                }else {
+                } else {
                     female++;
                 }
             }
@@ -235,34 +235,34 @@ public class EmployeeInfoController {
     @RequestMapping("/runPython")
     public BaseResponse runPython(@RequestBody EmployeeRequest request) {
 
-        BaseResponse response=new BaseResponse();
+        BaseResponse response = new BaseResponse();
         EmployeeInfo employee = employeeInfoService.findEmployeeByID(request.getId());
         System.out.println(request.toString());
 
-        String idNumber=employee.getId_card();
+        String idNumber = employee.getId_card();
 //        System.out.println("------------------"+idNumber);
 
         String result = "";
         try {
             //调用python，其中字符串数组对应的是python，python文件路径，向python传递的参数
-            String[] strs=new String[] {"python","D:\\newdesktop\\test.py",idNumber};
+            String[] strs = new String[]{"python", "D:\\newdesktop\\test.py", idNumber};
             System.out.println(strs);
             //Runtime类封装了运行时的环境。每个 Java 应用程序都有一个 Runtime 类实例，使应用程序能够与其运行的环境相连接。
             //一般不能实例化一个Runtime对象，应用程序也不能创建自己的 Runtime 类实例，但可以通过 getRuntime 方法获取当前Runtime运行时对象的引用。
             // exec(String[] cmdarray) 在单独的进程中执行指定命令和变量。
             Process pr = Runtime.getRuntime().exec(strs);
             //使用缓冲流接受程序返回的结果
-            BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));//注意格式
+            BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(), "GBK"));//注意格式
             //定义一个接受python程序处理的返回结果
-            String line=" ";
-            while((line=in.readLine())!=null) {
+            String line = " ";
+            while ((line = in.readLine()) != null) {
                 //循环打印出运行的结果
-                result+=line+" ";
+                result += line + " ";
             }
             //关闭in资源
             in.close();
             pr.waitFor();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("python传来的结果：");
@@ -274,19 +274,19 @@ public class EmployeeInfoController {
     }
 
     @RequestMapping("/addPhotoE")
-    public BaseResponse addPhotoE(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "user") String id) throws IOException{
+    public BaseResponse addPhotoE(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "user") String id) throws IOException {
         BaseResponse response = new BaseResponse();
         EmployeeInfo employeeInfo = employeeInfoService.findEmployeeById_card(id);
 
-        String base = imgPath+"images/employee/";
-        String path=base+employeeInfo.getId().toString()+"/";
-        String fileName=employeeInfo.getId().toString()+".jpg";
-        System.out.println(path+fileName);
+        String base = imgPath + "images/employee/";
+        String path = base + employeeInfo.getId().toString() + "/";
+        String fileName = employeeInfo.getId().toString() + ".jpg";
+        System.out.println(path + fileName);
 
-        employeeInfo.setImgset_dir("images/employee/"+employeeInfo.getId().toString()+"/"+employeeInfo.getId().toString()+".jpg");
-        if(file!=null&&id!=null){
-            Utils.getImaFile(file,path,fileName);
-        }else{
+        employeeInfo.setImgset_dir("images/employee/" + employeeInfo.getId().toString() + "/" + employeeInfo.getId().toString() + ".jpg");
+        if (file != null && id != null) {
+            Utils.getImaFile(file, path, fileName);
+        } else {
             response.setMsg("失败");
             response.setCode(0);
             return response;
