@@ -182,13 +182,13 @@ VALUES (2, NULL, NULL, 'wyy', 'E10ADC3949BA59ABBE56E057F20F883E', '吴瑛瑛', '
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `volunteer_info`
 VALUES (1, NULL, NULL, '符永乐', '男', '123', '460031199912166111', '1999-12-16 00:00:00', '2020-07-02 10:23:00', NULL,
-        NULL, NULL, '优秀义工', '不知道', '2020-07-03 13:58:37', 2, NULL, NULL, '0');
+        NULL, NULL, '优秀义工', '已采集', '2020-07-03 13:58:37', 2, NULL, NULL, '0');
 INSERT INTO `employee_info`
 VALUES (1, NULL, NULL, '崔超群', '男', '123', '370126199907284210', '1999-07-28 00:00:00', '2020-07-04 14:57:00', NULL,
-        NULL, NULL, '优秀工作人员', '不知道', '2020-07-02 10:38:45', 1, NULL, NULL, '0');
+        NULL, NULL, '优秀工作人员', '已采集', '2020-07-02 10:38:45', 1, NULL, NULL, '0');
 INSERT INTO `oldperson_info`
 VALUES (1, NULL, NULL, '李程遥', '男', '123', '220203199904264810', '1999-04-26 00:00:00', '2020-07-20 00:00:00', NULL,
-        NULL, NULL, '12', 'aaa', '儿子', '11111111111', 'aaaaaa', 'aaa', '儿子', '11111111111', 'aaaaaa', '好', '好得很', '不知道',
+        NULL, NULL, '12', 'aaa', '儿子', '11111111111', 'aaaaaa', 'aaa', '儿子', '11111111111', 'aaaaaa', '好', '好得很', '已采集',
         '2020-07-02 21:34:59', 1, NULL, NULL, '0');
 
 
