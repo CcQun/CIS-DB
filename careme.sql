@@ -174,6 +174,7 @@ CREATE TABLE `sys_user`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 62
   DEFAULT CHARSET = utf8;
+
 INSERT INTO `sys_user`
 VALUES (1, NULL, NULL, 'zsm', '3B6302C1ED258F38542D468F7111C5FC', '周诗梦', '女', '7868@163.com', '123', '12345', NULL,
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -191,5 +192,5 @@ VALUES (1, NULL, NULL, '李程遥', '男', '123', '220203199904264810', '1999-04
         NULL, NULL, '12', 'aaa', '儿子', '11111111111', 'aaaaaa', 'aaa', '儿子', '11111111111', 'aaaaaa', '好', '好得很', '已采集',
         '2020-07-02 21:34:59', 1, NULL, NULL, '0');
 
-
 /*!40101 SET character_set_client = @saved_cs_client */;
+

@@ -53,7 +53,7 @@ public class ElseController {
 
     //获取所有人id_card 和名字和类型
     @RequestMapping("/queryAll")
-    public ListResponse queryAll(@RequestBody OldpersonRequest request) throws ParseException {
+    public ListResponse queryAll() throws ParseException {
         ListResponse response=new ListResponse();
         List<PeopleInfo> list=new ArrayList<PeopleInfo>();
 
