@@ -1,5 +1,11 @@
 package com.example.demo.core;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -69,5 +75,21 @@ public class Utils {
             }
         }
         return age;
+    }
+
+    public static void getImaFile(MultipartFile file,String path,String fileName) throws IOException {
+        InputStream in = file.getInputStream();
+        File mkdir =new File(path);
+        if(!mkdir.exists()){
+            mkdir.mkdirs();
+        }
+        FileOutputStream os = new FileOutputStream(mkdir.getPath()+"/"+fileName);
+        int len=0;
+        while((len = in.read())!=-1){
+            os.write(len);
+        }
+        os.flush();
+        in.close();
+        os.close();
     }
 }

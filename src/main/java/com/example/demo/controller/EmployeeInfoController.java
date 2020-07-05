@@ -8,10 +8,14 @@ import com.example.demo.db.model.EmployeeInfo;
 import com.example.demo.core.crp.StatResponse;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +39,9 @@ public class EmployeeInfoController {
     private final SysUserService sysUserService;
     @Autowired
     private final VolunteerInfoService volunteerInfoService;
+
+    @Value("${web.upload-path}")
+    private String imgPath;
 
     public EmployeeInfoController(EmployeeInfoService employeeInfoService,
                           EventInfoService eventInfoService,
@@ -219,6 +226,31 @@ public class EmployeeInfoController {
         response.setNumberOfL3(level3);
         response.setCode(1);
         response.setMsg("统计信息返回");
+        return response;
+    }
+
+    @RequestMapping("/addPhotoE")
+    public BaseResponse addPhotoE(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "user") String id) throws IOException{
+        BaseResponse response = new BaseResponse();
+        EmployeeInfo employeeInfo = employeeInfoService.findEmployeeById_card(id);
+
+        String base = imgPath+"images/employee/";
+        String path=base+employeeInfo.getId().toString()+"/";
+        String fileName=employeeInfo.getId().toString()+".jpg";
+        System.out.println(path+fileName);
+
+        employeeInfo.setImgset_dir("images/employee/"+employeeInfo.getId().toString()+"/"+employeeInfo.getId().toString()+".jpg");
+        if(file!=null&&id!=null){
+            Utils.getImaFile(file,path,fileName);
+        }else{
+            response.setMsg("失败");
+            response.setCode(0);
+            return response;
+        }
+
+        employeeInfoService.save(employeeInfo);
+        response.setCode(1);
+        response.setMsg("员工头像设定成功");
         return response;
     }
 }
