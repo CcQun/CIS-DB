@@ -34,10 +34,10 @@ public class EventInfoController {
     private final VolunteerInfoService volunteerInfoService;
 
     public EventInfoController(EmployeeInfoService employeeInfoService,
-                                  EventInfoService eventInfoService,
-                                  OldpersonInfoService oldpersonInfoService,
-                                  SysUserService sysUserService,
-                                  VolunteerInfoService volunteerInfoService) {
+                               EventInfoService eventInfoService,
+                               OldpersonInfoService oldpersonInfoService,
+                               SysUserService sysUserService,
+                               VolunteerInfoService volunteerInfoService) {
         this.employeeInfoService = employeeInfoService;
         this.eventInfoService = eventInfoService;
         this.oldpersonInfoService = oldpersonInfoService;
@@ -48,19 +48,21 @@ public class EventInfoController {
     //插入事件
     @RequestMapping("/addEvent")
     public BaseResponse addEvent(@RequestBody EventRequest request) throws ParseException {
-        BaseResponse response =new BaseResponse();
-        EventInfo event= EventInfo.builder()
-                .id(getIDNumber()+1)
+        BaseResponse response = new BaseResponse();
+        EventInfo event = EventInfo.builder()
+                .id(getIDNumber() + 1)
                 .event_desc(request.getEvent_desc())
                 .event_type(request.getEvent_type())
                 .event_date(Utils.strToDateLong(request.getEvent_date()))
+                .event_location(request.getEvent_location())
                 .oldperson_id(request.getOldperson_id())
                 .build();
         eventInfoService.save(event);
         response.setCode(1);
-        response.setMsg("add event successfully!!");
+        response.setMsg((getIDNumber() + 1) + "");
         return response;
     }
+
 
     //获得最大id
     public Integer getIDNumber() {
