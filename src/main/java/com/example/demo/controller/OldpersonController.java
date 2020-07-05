@@ -8,6 +8,7 @@ import com.example.demo.core.crp.OldStatResponse;
 import com.example.demo.db.model.OldpersonInfo;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +36,9 @@ public class OldpersonController {
     private final SysUserService sysUserService;
     @Autowired
     private final VolunteerInfoService volunteerInfoService;
+
+    @Value("${web.upload-path}")
+    private String imgPath;
 
     public OldpersonController(EmployeeInfoService employeeInfoService,
                                EventInfoService eventInfoService,
@@ -204,7 +208,7 @@ public class OldpersonController {
             for(int i=0;i<total;i++){
                 OldpersonInfo oldpersonInfo = list.get(i);
                 int age= Utils.getAge(oldpersonInfo.getBirthday());
-                
+
                 if(oldpersonInfo.getREMOVE().equals("1")){
                     continue;
                 }
@@ -252,35 +256,25 @@ public class OldpersonController {
         BaseResponse response = new BaseResponse();
         System.out.println(id);
         OldpersonInfo oldpersonInfo = oldpersonInfoService.findOldpersonById_card(id);
-        String base = System.getProperty("user.dir")+"\\src\\main\\resources\\static\\images\\";
 
-        String path=base+oldpersonInfo.getID().toString()+"\\";
+        String base = imgPath+"images/oldPerson/";
+        String path=base+oldpersonInfo.getID().toString()+"/";
         String fileName=oldpersonInfo.getID().toString()+".jpg";
         System.out.println(path+fileName);
         //设置头像路径
-        oldpersonInfo.setImgset_dir("images/"+oldpersonInfo.getID().toString()+"/"+oldpersonInfo.getID().toString()+".jpg");
+        oldpersonInfo.setImgset_dir("images/oldPerson/"+oldpersonInfo.getID().toString()+"/"+oldpersonInfo.getID().toString()+".jpg");
 
         if(file!=null&&id!=null){
-            InputStream in = file.getInputStream();
-            File mkdir =new File(path);
-            if(!mkdir.exists()){
-                mkdir.mkdirs();
-            }
-            FileOutputStream os = new FileOutputStream(mkdir.getPath()+"\\"+fileName);
-            int len=0;
-            while((len = in.read())!=-1){
-                os.write(len);
-            }
-            oldpersonInfoService.save(oldpersonInfo);
-            os.flush();
-            in.close();
-            os.close();
+            Utils.getImaFile(file,path,fileName);
         }else{
             response.setMsg("失败");
             response.setCode(0);
+            return response;
         }
+
+        oldpersonInfoService.save(oldpersonInfo);
         response.setCode(1);
-        response.setMsg("照片录入成功");
+        response.setMsg("老人头像设定成功");
         return response;
     }
 }
