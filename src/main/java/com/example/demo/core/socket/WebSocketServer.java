@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * @author zhengkai.blog.csdn.net
+ * @author zsm
  */
 @ServerEndpoint("/imserver/{userId}")
 @Component
@@ -84,24 +84,25 @@ public class WebSocketServer {
         //消息保存到数据库、redis
         if(StringUtils.isNotBlank(message)){
             try {
-/*                //解析发送的报文
+
+               //解析发送的报文
                 JSONObject jsonObject = JSON.parseObject(message);
                 //追加发送人(防止串改)
                 jsonObject.put("fromUserId",this.userId);
                 String toUserId=jsonObject.getString("toUserId");
                 //传送给对应toUserId用户的websocket
+                webSocketMap.get(userId).sendMessage("收到！给你发消息了！！");
+                System.out.println("已发送");
                 if(StringUtils.isNotBlank(toUserId)&&webSocketMap.containsKey(toUserId)){
-                    webSocketMap.get(toUserId).sendMessage(jsonObject.toJSONString());
+                 //   webSocketMap.get(toUserId).sendMessage(jsonObject.toJSONString());
 
-                    webSocketMap.get(userId).sendMessage(message);
+                    webSocketMap.get(userId).sendMessage("收到");
 
                 }else{
-            //        log.error("请求的userId:"+toUserId+"不在该服务器上");
+                    System.out.println("请求的userId:"+toUserId+"不在该服务器上");
                     //否则不在这个服务器上，发送到mysql或者redis
                 }
 
- */
-                webSocketMap.get(userId).sendMessage(message);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -131,6 +132,7 @@ public class WebSocketServer {
     /**
      * 发送自定义消息
      * */
+
     public static void sendInfo(String message,@PathParam("userId") String userId) throws IOException {
     //    log.info("发送消息到:"+userId+"，报文:"+message);
         if(StringUtils.isNotBlank(userId)&&webSocketMap.containsKey(userId)){
@@ -139,6 +141,7 @@ public class WebSocketServer {
      //       log.error("用户"+userId+",不在线！");
         }
     }
+
 
     public static synchronized int getOnlineCount() {
         return onlineCount;

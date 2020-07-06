@@ -102,7 +102,7 @@ public class ElseController {
 
     @RequestMapping("/sendMessage")
     public BaseResponse sendMessage(@RequestBody MessageRequest request) throws IOException {
-        WebSocketServer.sendInfo(request.getMessage(),"1");
+        WebSocketServer.sendInfo(request.getMessage(),request.getUserId());
         BaseResponse response=new BaseResponse();
         return response;
 
