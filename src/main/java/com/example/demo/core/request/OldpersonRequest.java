@@ -6,6 +6,7 @@ import java.util.Date;
 
 @Data
 public class OldpersonRequest {
+
     @JsonProperty("ID")
     private Integer ID;
 

@@ -6,6 +6,7 @@ import com.example.demo.core.response.BaseResponse;
 import com.example.demo.core.response.ListResponse;
 import com.example.demo.core.crp.OldStatResponse;
 import com.example.demo.db.model.OldpersonInfo;
+import com.example.demo.db.model.SysUser;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -254,20 +255,16 @@ public class OldpersonController {
 
     //运行python脚本
     @RequestMapping("/runPython")
-    public BaseResponse runPython(@RequestBody OldpersonRequest request) {
+    public BaseResponse runPython(@RequestParam(value = "ID") String ID,@RequestParam(value = "userID") String userID) {
+
 
         BaseResponse response=new BaseResponse();
-        OldpersonInfo oldperson = oldpersonInfoService.findOldpersonByID(request.getID());
-        System.out.println(request.toString());
-
-        String idNumber=oldperson.getId_card();
-//        System.out.println("------------------"+idNumber);
-
-        String result = "";
+        System.out.println("管理员ID："+userID);
+        System.out.println("老人id："+ID);
+        String result = ID+" "+userID;
         try {
             //调用python，其中字符串数组对应的是python，python文件路径，向python传递的参数
-            String[] strs=new String[] {"python","D:\\newdesktop\\test.py",idNumber};
-            System.out.println(strs);
+            String[] strs=new String[] {"D:\\Program\\Anaconda3\\Install\\envs\\tensorflow36\\python.exe","D:\\Class_Homework\\大三小学期\\cv\\CIS-CV\\collectingfaces.py",result};
             //Runtime类封装了运行时的环境。每个 Java 应用程序都有一个 Runtime 类实例，使应用程序能够与其运行的环境相连接。
             //一般不能实例化一个Runtime对象，应用程序也不能创建自己的 Runtime 类实例，但可以通过 getRuntime 方法获取当前Runtime运行时对象的引用。
             // exec(String[] cmdarray) 在单独的进程中执行指定命令和变量。
