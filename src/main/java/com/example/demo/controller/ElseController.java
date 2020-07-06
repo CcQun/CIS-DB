@@ -2,10 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.core.cm.PeopleInfo;
 import com.example.demo.core.request.LoginRequest;
+import com.example.demo.core.request.MessageRequest;
 import com.example.demo.core.request.OldpersonRequest;
 import com.example.demo.core.response.BaseResponse;
 import com.example.demo.core.response.DataResponse;
 import com.example.demo.core.response.ListResponse;
+import com.example.demo.core.socket.WebSocketServer;
 import com.example.demo.db.model.EmployeeInfo;
 import com.example.demo.db.model.OldpersonInfo;
 import com.example.demo.db.model.SysUser;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,4 +99,12 @@ public class ElseController {
 
     }
 
+
+    @RequestMapping("/sendMessage")
+    public BaseResponse sendMessage(@RequestBody MessageRequest request) throws IOException {
+        WebSocketServer.sendInfo(request.getMessage(),"1");
+        BaseResponse response=new BaseResponse();
+        return response;
+
+    }
 }
