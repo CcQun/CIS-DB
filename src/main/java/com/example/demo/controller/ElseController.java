@@ -171,10 +171,7 @@ public class ElseController {
                 v.setISACTIVE("已采集");
                 volunteerInfoService.save(v);
             }
-
-
         }
-
         WebSocketServer.sendInfo(request.getMessage(),request.getUserId());
         BaseResponse response=new BaseResponse();
         response.setCode(1);
