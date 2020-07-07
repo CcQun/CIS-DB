@@ -122,7 +122,7 @@ public class ElseController {
 
         }
 
-//        WebSocketServer.sendInfo(request.getMessage(),request.getUserId());
+        WebSocketServer.sendInfo(request.getMessage(),request.getUserId());
         BaseResponse response=new BaseResponse();
         response.setCode(1);
         response.setMsg("已传送");
