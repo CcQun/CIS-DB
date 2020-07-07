@@ -14,12 +14,17 @@ import com.example.demo.db.model.SysUser;
 import com.example.demo.db.model.VolunteerInfo;
 import com.example.demo.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.swing.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +46,14 @@ public class ElseController {
     private final SysUserService sysUserService;
     @Autowired
     private final VolunteerInfoService volunteerInfoService;
+
+    //解释器路径
+    @Value("${InterpreterPath}")
+    private String interpreterPath;
+    //脚本路径
+
+    @Value("${pythonPath}")
+    private String pyPath;
 
     public ElseController(EmployeeInfoService employeeInfoService,
                           EventInfoService eventInfoService,
@@ -100,8 +113,48 @@ public class ElseController {
     }
 
 
+    //运行人脸采集脚本
+    @RequestMapping("/runFaceCollectPython")
+    public BaseResponse runFaceCollectPython(@RequestParam(value = "ID") String ID, @RequestParam(value = "userID") String userID, @RequestParam(value="type") String type) {
+        BaseResponse response=new BaseResponse();
+        System.out.println("管理员ID："+userID);
+        System.out.println("id："+ID);
+        System.out.println("采集类型："+type);
+        String result = ID+" "+userID;
+        try {
+            //调用python，其中字符串数组对应的是python，python文件路径，向python传递的参数
+            String[] strs=new String[] {interpreterPath,pyPath,ID,userID,type};
+            //Runtime类封装了运行时的环境。每个 Java 应用程序都有一个 Runtime 类实例，使应用程序能够与其运行的环境相连接。
+            //一般不能实例化一个Runtime对象，应用程序也不能创建自己的 Runtime 类实例，但可以通过 getRuntime 方法获取当前Runtime运行时对象的引用。
+            // exec(String[] cmdarray) 在单独的进程中执行指定命令和变量。
+            System.out.println(strs[1]+"_"+pyPath);
+            Process pr = Runtime.getRuntime().exec(strs);
+            //使用缓冲流接受程序返回的结果
+            BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));//注意格式
+            //定义一个接受python程序处理的返回结果
+            String line=" ";
+            while((line=in.readLine())!=null) {
+                //循环打印出运行的结果
+                result+=line+" ";
+            }
+            //关闭in资源
+            in.close();
+            pr.waitFor();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("python传来的结果：");
+        //打印返回结果
+        System.out.println(result);
+        response.setMsg(result);
+        response.setCode(1);
+
+        return response;
+    }
+
     @RequestMapping("/cffeedback")
     public BaseResponse cffeedback(@RequestBody MessageRequest request) throws IOException {
+        System.out.println(request.toString());
         if(request.getMessage().equals("采集完成")){
             if(request.getType().equals("oldpeople")) {
                 OldpersonInfo old = oldpersonInfoService.findOldpersonByID(Integer.parseInt(request.getId()));
