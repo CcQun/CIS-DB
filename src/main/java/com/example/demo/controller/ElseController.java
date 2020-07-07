@@ -100,10 +100,32 @@ public class ElseController {
     }
 
 
-    @RequestMapping("/sendMessage")
+    @RequestMapping("/cffeedback")
     public BaseResponse sendMessage(@RequestBody MessageRequest request) throws IOException {
-        WebSocketServer.sendInfo(request.getMessage(),request.getUserId());
+        if(request.getMessage().equals("采集完成")){
+            if(request.getType().equals("oldpeople")) {
+                OldpersonInfo old = oldpersonInfoService.findOldpersonByID(Integer.parseInt(request.getId()));
+                old.setISACTIVE("已采集");
+                oldpersonInfoService.save(old);
+            }
+            else if(request.getType().equals("employee")){
+                EmployeeInfo employee=employeeInfoService.findEmployeeByID(Integer.parseInt(request.getId()));
+                employee.setISACTIVE("已采集");
+                employeeInfoService.save(employee);
+            }
+            else{
+                VolunteerInfo v=volunteerInfoService.findVolunteerByID(Integer.parseInt(request.getId()));
+                v.setISACTIVE("已采集");
+                volunteerInfoService.save(v);
+            }
+
+
+        }
+
+//        WebSocketServer.sendInfo(request.getMessage(),request.getUserId());
         BaseResponse response=new BaseResponse();
+        response.setCode(1);
+        response.setMsg("已传送");
         return response;
 
     }
