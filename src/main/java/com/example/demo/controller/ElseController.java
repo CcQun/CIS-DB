@@ -101,7 +101,7 @@ public class ElseController {
 
 
     @RequestMapping("/cffeedback")
-    public BaseResponse sendMessage(@RequestBody MessageRequest request) throws IOException {
+    public BaseResponse cffeedback(@RequestBody MessageRequest request) throws IOException {
         if(request.getMessage().equals("采集完成")){
             if(request.getType().equals("oldpeople")) {
                 OldpersonInfo old = oldpersonInfoService.findOldpersonByID(Integer.parseInt(request.getId()));
