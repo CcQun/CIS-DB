@@ -231,44 +231,6 @@ public class EmployeeInfoController {
         return response;
     }
 
-    //运行python脚本
-    @RequestMapping("/runPython")
-    public BaseResponse runPython(@RequestParam(value = "ID") String ID,@RequestParam(value = "userID") String userID) {
-
-        BaseResponse response = new BaseResponse();
-        System.out.println("管理员ID："+userID);
-        System.out.println("老人id："+ID);
-        String result = ID+" "+userID;
-        String type = "employe";
-        try {
-            //调用python，其中字符串数组对应的是python，python文件路径，向python传递的参数
-            String[] strs=new String[] {"D:\\Program\\Anaconda3\\Install\\envs\\tensorflow36\\python.exe","D:\\Class_Homework\\大三小学期\\cv\\CIS-CV\\collectingfaces.py",ID,userID,type};
-            //Runtime类封装了运行时的环境。每个 Java 应用程序都有一个 Runtime 类实例，使应用程序能够与其运行的环境相连接。
-            //一般不能实例化一个Runtime对象，应用程序也不能创建自己的 Runtime 类实例，但可以通过 getRuntime 方法获取当前Runtime运行时对象的引用。
-            // exec(String[] cmdarray) 在单独的进程中执行指定命令和变量。
-            Process pr = Runtime.getRuntime().exec(strs);
-            //使用缓冲流接受程序返回的结果
-            BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));//注意格式
-            //定义一个接受python程序处理的返回结果
-            String line=" ";
-            while((line=in.readLine())!=null) {
-                //循环打印出运行的结果
-                result+=line+" ";
-            }
-            //关闭in资源
-            in.close();
-            pr.waitFor();
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("python传来的结果：");
-        //打印返回结果
-        System.out.println(result);
-        response.setMsg(result);
-        response.setCode(1);
-
-        return response;
-    }
 
     @RequestMapping("/addPhotoE")
     public BaseResponse addPhotoE(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "user") String id) throws IOException {
