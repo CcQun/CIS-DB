@@ -222,7 +222,6 @@ public class VolunteerInfoController {
         return response;
     }
 
-
     @RequestMapping("/addPhotoV")
     public BaseResponse addPhotoV(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "user") String id) throws IOException {
         BaseResponse response = new BaseResponse();

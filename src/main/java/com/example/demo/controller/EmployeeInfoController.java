@@ -232,7 +232,6 @@ public class EmployeeInfoController {
     }
 
 
-
     @RequestMapping("/addPhotoE")
     public BaseResponse addPhotoE(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "user") String id) throws IOException {
         BaseResponse response = new BaseResponse();

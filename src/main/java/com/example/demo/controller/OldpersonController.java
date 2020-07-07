@@ -253,7 +253,6 @@ public class OldpersonController {
         return response;
     }
 
-
     //老人头像设定
     @RequestMapping(value = "/addPhotoOP")
     public BaseResponse addPhotoOP(@RequestParam(value = "file") MultipartFile file,@RequestParam(value = "user") String id) throws IOException {
