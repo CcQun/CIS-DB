@@ -134,9 +134,9 @@ public class ElseController {
             //Runtime类封装了运行时的环境。每个 Java 应用程序都有一个 Runtime 类实例，使应用程序能够与其运行的环境相连接。
             //一般不能实例化一个Runtime对象，应用程序也不能创建自己的 Runtime 类实例，但可以通过 getRuntime 方法获取当前Runtime运行时对象的引用。
             // exec(String[] cmdarray) 在单独的进程中执行指定命令和变量。
-            Process pr = Runtime.getRuntime().exec(strs);
+            collectingPy = Runtime.getRuntime().exec(strs);
             //使用缓冲流接受程序返回的结果
-            BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));//注意格式
+            BufferedReader in = new BufferedReader(new InputStreamReader(collectingPy.getInputStream(),"GBK"));//注意格式
             //定义一个接受python程序处理的返回结果
             String line=" ";
             while((line=in.readLine())!=null) {
@@ -145,7 +145,7 @@ public class ElseController {
             }
             //关闭in资源
             in.close();
-            pr.waitFor();
+            collectingPy.waitFor();
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -174,10 +174,15 @@ public class ElseController {
     @RequestMapping("/runTrainingPython")
     public BaseResponse runTrainingPython(@RequestParam(value = "userID") String userID) throws IOException {
         BaseResponse response = new BaseResponse();
-
-        String[] strs=new String[] {interpreterPath,trainingPyPath,userID};
-        trainingPy = Runtime.getRuntime().exec(strs);
-
+        try {
+            String[] strs=new String[] {interpreterPath,trainingPyPath,userID};
+            trainingPy = Runtime.getRuntime().exec(strs);
+            trainingPy.waitFor();
+        }catch (Exception e){
+            e.printStackTrace();
+            response.setCode(0);
+            response.setMsg("训练出错");
+        }
         response.setCode(1);
         response.setMsg("结果返回");
         return response;
