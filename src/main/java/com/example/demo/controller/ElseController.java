@@ -51,12 +51,15 @@ public class ElseController {
     //解释器路径
     @Value("${InterpreterPath}")
     private String interpreterPath;
+
     //采集人脸脚本路径
     @Value("${collectingPyPath}")
     private String collectingPyPath;
+
     //训练脚本路径
     @Value("${trainingPyPath}")
     private String trainingPyPath;
+
     //采集人脸进程
     Process collectingPy;
     //训练进程
@@ -77,13 +80,13 @@ public class ElseController {
     //获取所有人id_card 和名字和类型
     @RequestMapping("/queryAll")
     public ListResponse queryAll() throws ParseException {
-        ListResponse response=new ListResponse();
-        List<PeopleInfo> list=new ArrayList<PeopleInfo>();
+        ListResponse response = new ListResponse();
+        List<PeopleInfo> list = new ArrayList<PeopleInfo>();
 
-        List<OldpersonInfo> old_list=oldpersonInfoService.findAll();
-        for(int i=0;i<old_list.size();i++){
-            if(old_list.get(i).getREMOVE().equals("0")){
-                PeopleInfo p=new PeopleInfo();
+        List<OldpersonInfo> old_list = oldpersonInfoService.findAll();
+        for (int i = 0; i < old_list.size(); i++) {
+            if (old_list.get(i).getREMOVE().equals("0")) {
+                PeopleInfo p = new PeopleInfo();
                 p.setId_card(old_list.get(i).getID());
                 p.setName(old_list.get(i).getUsername());
                 p.setType("old_people");
@@ -91,10 +94,10 @@ public class ElseController {
             }
         }
 
-        List<EmployeeInfo> employee_list=employeeInfoService.findAll();
-        for(int i=0;i<employee_list.size();i++){
-            if(employee_list.get(i).getREMOVE().equals("0")){
-                PeopleInfo p=new PeopleInfo();
+        List<EmployeeInfo> employee_list = employeeInfoService.findAll();
+        for (int i = 0; i < employee_list.size(); i++) {
+            if (employee_list.get(i).getREMOVE().equals("0")) {
+                PeopleInfo p = new PeopleInfo();
                 p.setId_card(employee_list.get(i).getId());
                 p.setName(employee_list.get(i).getUsername());
                 p.setType("employee");
@@ -102,10 +105,10 @@ public class ElseController {
             }
         }
 
-        List<VolunteerInfo> volunteer_list=volunteerInfoService.findAll();
-        for(int i=0;i<volunteer_list.size();i++){
-            if(volunteer_list.get(i).getREMOVE().equals("0")){
-                PeopleInfo p=new PeopleInfo();
+        List<VolunteerInfo> volunteer_list = volunteerInfoService.findAll();
+        for (int i = 0; i < volunteer_list.size(); i++) {
+            if (volunteer_list.get(i).getREMOVE().equals("0")) {
+                PeopleInfo p = new PeopleInfo();
                 p.setId_card(volunteer_list.get(i).getId());
                 p.setName(volunteer_list.get(i).getName());
                 p.setType("volunteer");
@@ -122,31 +125,31 @@ public class ElseController {
 
     //运行人脸采集脚本
     @RequestMapping("/runFaceCollectPython")
-    public BaseResponse runFaceCollectPython(@RequestParam(value = "ID") String ID, @RequestParam(value = "userID") String userID, @RequestParam(value="type") String type) {
-        BaseResponse response=new BaseResponse();
-        System.out.println("管理员ID："+userID);
-        System.out.println("id："+ID);
-        System.out.println("采集类型："+type);
-        String result = ID+" "+userID;
+    public BaseResponse runFaceCollectPython(@RequestParam(value = "ID") String ID, @RequestParam(value = "userID") String userID, @RequestParam(value = "type") String type) {
+        BaseResponse response = new BaseResponse();
+        System.out.println("管理员ID：" + userID);
+        System.out.println("id：" + ID);
+        System.out.println("采集类型：" + type);
+        String result = ID + " " + userID;
         try {
             //调用python，其中字符串数组对应的是python，python文件路径，向python传递的参数
-            String[] strs=new String[] {interpreterPath,collectingPyPath,ID,userID,type};
+            String[] strs = new String[]{interpreterPath, collectingPyPath, ID, userID, type};
             //Runtime类封装了运行时的环境。每个 Java 应用程序都有一个 Runtime 类实例，使应用程序能够与其运行的环境相连接。
             //一般不能实例化一个Runtime对象，应用程序也不能创建自己的 Runtime 类实例，但可以通过 getRuntime 方法获取当前Runtime运行时对象的引用。
             // exec(String[] cmdarray) 在单独的进程中执行指定命令和变量。
             Process pr = Runtime.getRuntime().exec(strs);
             //使用缓冲流接受程序返回的结果
-            BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));//注意格式
+            BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(), "GBK"));//注意格式
             //定义一个接受python程序处理的返回结果
-            String line=" ";
-            while((line=in.readLine())!=null) {
+            String line = " ";
+            while ((line = in.readLine()) != null) {
                 //循环打印出运行的结果
-                result+=line+" ";
+                result += line + " ";
             }
             //关闭in资源
             in.close();
             pr.waitFor();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("python传来的结果：");
@@ -158,9 +161,9 @@ public class ElseController {
     }
 
     @RequestMapping("/endFaceCollecting")
-    public BaseResponse endFaceCollecting(){
+    public BaseResponse endFaceCollecting() {
         BaseResponse response = new BaseResponse();
-        if(collectingPy==null){
+        if (collectingPy == null) {
             response.setCode(0);
             response.setMsg("当前不在采集状态");
             return response;
@@ -175,7 +178,7 @@ public class ElseController {
     public BaseResponse runTrainingPython(@RequestParam(value = "userID") String userID) throws IOException {
         BaseResponse response = new BaseResponse();
 
-        String[] strs=new String[] {interpreterPath,trainingPyPath,userID};
+        String[] strs = new String[]{interpreterPath, trainingPyPath, userID};
         trainingPy = Runtime.getRuntime().exec(strs);
 
         response.setCode(1);
@@ -184,9 +187,9 @@ public class ElseController {
     }
 
     @RequestMapping("/endTraining")
-    public BaseResponse endTraining(){
+    public BaseResponse endTraining() {
         BaseResponse response = new BaseResponse();
-        if(trainingPy==null){
+        if (trainingPy == null) {
             response.setCode(0);
             response.setMsg("当前不在训练状态");
             return response;
@@ -200,25 +203,23 @@ public class ElseController {
     @RequestMapping("/cffeedback")
     public BaseResponse cffeedback(@RequestBody MessageRequest request) throws IOException {
         System.out.println(request.toString());
-        if(request.getMessage().equals("采集完成")){
-            if(request.getType().equals("oldpeople")) {
+        if (request.getMessage().equals("采集完成")) {
+            if (request.getType().equals("oldpeople")) {
                 OldpersonInfo old = oldpersonInfoService.findOldpersonByID(Integer.parseInt(request.getId()));
                 old.setISACTIVE("已采集");
                 oldpersonInfoService.save(old);
-            }
-            else if(request.getType().equals("employee")){
-                EmployeeInfo employee=employeeInfoService.findEmployeeByID(Integer.parseInt(request.getId()));
+            } else if (request.getType().equals("employee")) {
+                EmployeeInfo employee = employeeInfoService.findEmployeeByID(Integer.parseInt(request.getId()));
                 employee.setISACTIVE("已采集");
                 employeeInfoService.save(employee);
-            }
-            else{
-                VolunteerInfo v=volunteerInfoService.findVolunteerByID(Integer.parseInt(request.getId()));
+            } else {
+                VolunteerInfo v = volunteerInfoService.findVolunteerByID(Integer.parseInt(request.getId()));
                 v.setISACTIVE("已采集");
                 volunteerInfoService.save(v);
             }
         }
-        WebSocketServer.sendInfo(request.getMessage(),request.getUserId());
-        BaseResponse response=new BaseResponse();
+        WebSocketServer.sendInfo(request.getMessage(), request.getUserId());
+        BaseResponse response = new BaseResponse();
         response.setCode(1);
         response.setMsg("已传送");
         return response;
@@ -228,8 +229,8 @@ public class ElseController {
     @RequestMapping("/trainfrfeedback")
     public BaseResponse trainfrfeedback(@RequestBody MessageRequest request) throws IOException {
         System.out.println(request.toString());
-        WebSocketServer.sendInfo(request.getMessage(),request.getUserId());
-        BaseResponse response=new BaseResponse();
+        WebSocketServer.sendInfo(request.getMessage(), request.getUserId());
+        BaseResponse response = new BaseResponse();
         response.setCode(1);
         response.setMsg("已传送");
         return response;
