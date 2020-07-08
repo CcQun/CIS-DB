@@ -13,6 +13,7 @@ import com.example.demo.db.model.OldpersonInfo;
 import com.example.demo.db.model.SysUser;
 import com.example.demo.db.model.VolunteerInfo;
 import com.example.demo.db.service.*;
+import org.apache.commons.lang.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -50,10 +51,16 @@ public class ElseController {
     //解释器路径
     @Value("${InterpreterPath}")
     private String interpreterPath;
-    //脚本路径
-
-    @Value("${pythonPath}")
-    private String pyPath;
+    //采集人脸脚本路径
+    @Value("${collectingPyPath}")
+    private String collectingPyPath;
+    //训练脚本路径
+    @Value("${trainingPyPath}")
+    private String trainingPyPath;
+    //采集人脸进程
+    Process collectingPy;
+    //训练进程
+    Process trainingPy;
 
     public ElseController(EmployeeInfoService employeeInfoService,
                           EventInfoService eventInfoService,
@@ -123,11 +130,10 @@ public class ElseController {
         String result = ID+" "+userID;
         try {
             //调用python，其中字符串数组对应的是python，python文件路径，向python传递的参数
-            String[] strs=new String[] {interpreterPath,pyPath,ID,userID,type};
+            String[] strs=new String[] {interpreterPath,collectingPyPath,ID,userID,type};
             //Runtime类封装了运行时的环境。每个 Java 应用程序都有一个 Runtime 类实例，使应用程序能够与其运行的环境相连接。
             //一般不能实例化一个Runtime对象，应用程序也不能创建自己的 Runtime 类实例，但可以通过 getRuntime 方法获取当前Runtime运行时对象的引用。
             // exec(String[] cmdarray) 在单独的进程中执行指定命令和变量。
-            System.out.println(strs[1]+"_"+pyPath);
             Process pr = Runtime.getRuntime().exec(strs);
             //使用缓冲流接受程序返回的结果
             BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream(),"GBK"));//注意格式
@@ -148,7 +154,46 @@ public class ElseController {
         System.out.println(result);
         response.setMsg(result);
         response.setCode(1);
+        return response;
+    }
 
+    @RequestMapping("/endFaceCollecting")
+    public BaseResponse endFaceCollecting(){
+        BaseResponse response = new BaseResponse();
+        if(collectingPy==null){
+            response.setCode(0);
+            response.setMsg("当前不在采集状态");
+            return response;
+        }
+        collectingPy.destroy();
+        response.setCode(1);
+        response.setMsg("已停止采集人脸");
+        return response;
+    }
+
+    @RequestMapping("/runTrainingPython")
+    public BaseResponse runTrainingPython(@RequestParam(value = "userID") String userID) throws IOException {
+        BaseResponse response = new BaseResponse();
+
+        String[] strs=new String[] {interpreterPath,trainingPyPath,userID};
+        trainingPy = Runtime.getRuntime().exec(strs);
+
+        response.setCode(1);
+        response.setMsg("结果返回");
+        return response;
+    }
+
+    @RequestMapping("/endTraining")
+    public BaseResponse endTraining(){
+        BaseResponse response = new BaseResponse();
+        if(trainingPy==null){
+            response.setCode(0);
+            response.setMsg("当前不在训练状态");
+            return response;
+        }
+        trainingPy.destroy();
+        response.setCode(1);
+        response.setMsg("已停止训练人脸");
         return response;
     }
 
