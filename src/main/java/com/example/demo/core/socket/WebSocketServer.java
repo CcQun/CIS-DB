@@ -141,6 +141,16 @@ public class WebSocketServer {
      //       log.error("用户"+userId+",不在线！");
         }
     }
+    //群发消息
+    public static void sendAll(String message) throws IOException {
+
+
+        for(WebSocketServer s : webSocketMap.values()) {
+
+            s.sendMessage(message);
+
+        }
+    }
 
 
     public static synchronized int getOnlineCount() {
