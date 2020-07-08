@@ -13,6 +13,7 @@ import com.example.demo.db.model.OldpersonInfo;
 import com.example.demo.db.model.SysUser;
 import com.example.demo.db.model.VolunteerInfo;
 import com.example.demo.db.service.*;
+import org.apache.commons.lang.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -156,6 +157,20 @@ public class ElseController {
         return response;
     }
 
+    @RequestMapping("/endFaceCollecting")
+    public BaseResponse endFaceCollecting(){
+        BaseResponse response = new BaseResponse();
+        if(collectingPy==null){
+            response.setCode(0);
+            response.setMsg("当前不在采集状态");
+            return response;
+        }
+        collectingPy.destroy();
+        response.setCode(1);
+        response.setMsg("已停止采集人脸");
+        return response;
+    }
+
     @RequestMapping("/runTrainingPython")
     public BaseResponse runTrainingPython(@RequestParam(value = "userID") String userID) throws IOException {
         BaseResponse response = new BaseResponse();
@@ -165,6 +180,20 @@ public class ElseController {
 
         response.setCode(1);
         response.setMsg("结果返回");
+        return response;
+    }
+
+    @RequestMapping("/endTraining")
+    public BaseResponse endTraining(){
+        BaseResponse response = new BaseResponse();
+        if(trainingPy==null){
+            response.setCode(0);
+            response.setMsg("当前不在训练状态");
+            return response;
+        }
+        trainingPy.destroy();
+        response.setCode(1);
+        response.setMsg("已停止训练人脸");
         return response;
     }
 
