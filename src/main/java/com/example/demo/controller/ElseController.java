@@ -179,4 +179,14 @@ public class ElseController {
         return response;
 
     }
+
+    @RequestMapping("/trainfrfeedback")
+    public BaseResponse trainfrfeedback(@RequestBody MessageRequest request) throws IOException {
+        System.out.println(request.toString());
+        WebSocketServer.sendInfo(request.getMessage(),request.getUserId());
+        BaseResponse response=new BaseResponse();
+        response.setCode(1);
+        response.setMsg("已传送");
+        return response;
+    }
 }
