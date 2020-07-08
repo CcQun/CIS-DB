@@ -78,34 +78,30 @@ public class WebSocketServer {
      *
      * @param message 客户端发送过来的消息*/
     @OnMessage
-    public void onMessage(String message, Session session) {
+    public void onMessage(String message, Session session) throws IOException {
         System.out.println("用户消息:"+userId+",报文:"+message);
         //可以群发消息
         //消息保存到数据库、redis
         if(StringUtils.isNotBlank(message)){
-            try {
+
 
                //解析发送的报文
                 JSONObject jsonObject = JSON.parseObject(message);
                 //追加发送人(防止串改)
-                jsonObject.put("fromUserId",this.userId);
-                String toUserId=jsonObject.getString("toUserId");
+
+               // jsonObject.put("fromUserId",this.userId);
+               // String toUserId=jsonObject.getString("toUserId");
                 //传送给对应toUserId用户的websocket
                 webSocketMap.get(userId).sendMessage("收到！给你发消息了！！");
                 System.out.println("已发送");
-                if(StringUtils.isNotBlank(toUserId)&&webSocketMap.containsKey(toUserId)){
+              //  if(StringUtils.isNotBlank(toUserId)&&webSocketMap.containsKey(toUserId)){
                  //   webSocketMap.get(toUserId).sendMessage(jsonObject.toJSONString());
 
-                    webSocketMap.get(userId).sendMessage("收到");
+                //    webSocketMap.get(userId).sendMessage("收到");
 
-                }else{
-                    System.out.println("请求的userId:"+toUserId+"不在该服务器上");
-                    //否则不在这个服务器上，发送到mysql或者redis
-                }
 
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+
+
 
 
         }

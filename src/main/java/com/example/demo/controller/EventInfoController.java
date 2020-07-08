@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.example.demo.core.Utils;
 import com.example.demo.core.request.EventRequest;
 import com.example.demo.core.request.OldpersonRequest;
 import com.example.demo.core.response.BaseResponse;
+import com.example.demo.core.response.ListResponse;
+import com.example.demo.core.socket.WebSocketServer;
 import com.example.demo.db.model.EventInfo;
 import com.example.demo.db.model.OldpersonInfo;
 import com.example.demo.db.service.*;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -47,7 +51,7 @@ public class EventInfoController {
 
     //插入事件
     @RequestMapping("/addEvent")
-    public BaseResponse addEvent(@RequestBody EventRequest request) throws ParseException {
+    public BaseResponse addEvent(@RequestBody EventRequest request) throws ParseException, IOException {
         BaseResponse response = new BaseResponse();
         EventInfo event = EventInfo.builder()
                 .id(getIDNumber() + 1)
@@ -60,6 +64,13 @@ public class EventInfoController {
         eventInfoService.save(event);
         response.setCode(1);
         response.setMsg((getIDNumber() + 1) + "");
+
+
+        List<EventInfo> list=eventInfoService.findAll();
+        JSONArray array=new JSONArray();
+        array.add(list);
+
+        WebSocketServer.sendAll(array.toJSONString());
         return response;
     }
 
