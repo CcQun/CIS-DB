@@ -143,7 +143,10 @@ public class WebSocketServer {
 
         for(WebSocketServer s : webSocketMap.values()) {
 
-            s.sendMessage(message);
+            String array[]=s.userId.split("-");
+            if(array.length>1&&array[1].equals("实时报表")){
+                s.sendMessage(message);
+            }
 
         }
     }
