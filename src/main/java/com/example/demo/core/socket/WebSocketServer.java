@@ -144,8 +144,10 @@ public class WebSocketServer {
         for(WebSocketServer s : webSocketMap.values()) {
 
             String array[]=s.userId.split("-");
-            if(array.length>1&&array[1].equals("实时报表")){
-                s.sendMessage(message);
+            if(array.length>1){
+                if(array[1].equals("实时报表")||array[1].equals("主界面")) {
+                    s.sendMessage(message);
+                }
             }
 
         }

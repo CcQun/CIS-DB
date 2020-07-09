@@ -65,16 +65,19 @@ public class EventInfoController {
         response.setCode(1);
         response.setMsg((getIDNumber() + 1) + "");
 
-
-        List<EventInfo> list=eventInfoService.findAll();
-        JSONArray array=new JSONArray();
-        array.add(list);
-
-        WebSocketServer.sendAll(array.toJSONString());
+        WebSocketServer.sendAll("事件更新");
         return response;
     }
 
-
+    @RequestMapping("/queryEvent")
+    public ListResponse queryEvent() {
+        List<EventInfo> list=eventInfoService.findAll();
+        ListResponse response=new ListResponse();
+        response.setCode(1);
+        response.setMsg("所有事件");
+        response.setData(list);
+        return response;
+    }
     //获得最大id
     public Integer getIDNumber() {
         List<EventInfo> events = eventInfoService.findAll();
@@ -86,5 +89,7 @@ public class EventInfoController {
         }
         return idNumber;
     }
+
+    //获得所有事件
 
 }
