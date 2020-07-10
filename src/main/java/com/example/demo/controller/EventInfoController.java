@@ -63,7 +63,7 @@ public class EventInfoController {
                 .build();
         eventInfoService.save(event);
         response.setCode(1);
-        response.setMsg((getIDNumber() + 1) + "");
+        response.setMsg(getIDNumber() + "");
 
         WebSocketServer.sendAll("事件更新");
         return response;

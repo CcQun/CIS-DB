@@ -58,18 +58,18 @@ public class OldpersonController {
     //录入老人信息/新增
     @RequestMapping("/addOldPerson")
     public BaseResponse addOldPerson(@RequestBody OldpersonRequest request) throws ParseException {
-        BaseResponse response=new BaseResponse();
-        OldpersonInfo temp=oldpersonInfoService.findOldpersonById_card(request.getId_card());
-        if(temp!=null){
+        BaseResponse response = new BaseResponse();
+        OldpersonInfo temp = oldpersonInfoService.findOldpersonById_card(request.getId_card());
+        if (temp != null) {
             response.setCode(0);
             response.setMsg("this oldpersonn has already in this system!!");
             return response;
         }
         Date day = new Date();
         System.out.println("加入老人");
-        System.out.println("创建时间"+day.toString());
+        System.out.println("创建时间" + day.toString());
 
-        OldpersonInfo oldperson= OldpersonInfo.builder()
+        OldpersonInfo oldperson = OldpersonInfo.builder()
                 .username(request.getUsername())
                 .gender(request.getGender())
                 .phone(request.getPhone())
@@ -91,7 +91,7 @@ public class OldpersonController {
                 .build();
         System.out.println("开始插表");
 
-        oldperson.setID(getIDNumber()+1);
+        oldperson.setID(getIDNumber() + 1);
         oldperson.setCheckin_date(Utils.strToDateLong(request.getCheckin_date()));
         oldperson.setCREATED(day);
 //        System.out.println(request.getCREATEBY());
@@ -99,7 +99,7 @@ public class OldpersonController {
 //        System.out.println(request.getISACTIVE());
         oldperson.setCREATEBY(request.getCREATEBY());
         oldpersonInfoService.save(oldperson);
-        System.out.println(request.getCREATEBY()+"加入成功");
+        System.out.println(request.getCREATEBY() + "加入成功");
         response.setCode(1);
         response.setMsg("add one oldperson successfully!!");
         return response;
@@ -109,8 +109,8 @@ public class OldpersonController {
     @RequestMapping("/editOldPerson")
     public BaseResponse editOldPerson(@RequestBody OldpersonRequest request) {
 
-        Date day=new Date();
-        OldpersonInfo oldperson= oldpersonInfoService.findOldpersonByID(request.getID());
+        Date day = new Date();
+        OldpersonInfo oldperson = oldpersonInfoService.findOldpersonByID(request.getID());
         System.out.println(oldperson.getUsername());
         oldperson.setGender(request.getGender());
         oldperson.setPhone(request.getPhone());
@@ -133,7 +133,7 @@ public class OldpersonController {
         oldperson.setUPDATED(day);
 
         oldpersonInfoService.save(oldperson);
-        BaseResponse reponse=new BaseResponse();
+        BaseResponse reponse = new BaseResponse();
 
         reponse.setCode(1);
         reponse.setMsg("edit oldperson successfully!!");
@@ -147,10 +147,10 @@ public class OldpersonController {
 
         List<OldpersonInfo> oldpersons = oldpersonInfoService.findAll();
         List<OldpersonInfo> olds = new ArrayList<>();
-        ListResponse response=new ListResponse();
-        for(int i=0;i<oldpersons.size();i++){
-            OldpersonInfo oldperson=oldpersons.get(i);
-            if(oldperson.getREMOVE().equals("1")){
+        ListResponse response = new ListResponse();
+        for (int i = 0; i < oldpersons.size(); i++) {
+            OldpersonInfo oldperson = oldpersons.get(i);
+            if (oldperson.getREMOVE().equals("1")) {
                 continue;
             }
             olds.add(oldperson);
@@ -167,10 +167,10 @@ public class OldpersonController {
     @RequestMapping("/removeOldPerson")
     public BaseResponse remove(@RequestBody OldpersonRequest request) {
 
-        Date day=new Date();
-        BaseResponse response=new BaseResponse();
+        Date day = new Date();
+        BaseResponse response = new BaseResponse();
 
-        OldpersonInfo oldperson=oldpersonInfoService.findOldpersonByID(request.getID());
+        OldpersonInfo oldperson = oldpersonInfoService.findOldpersonByID(request.getID());
         System.out.println(oldperson.getUsername());
         oldperson.setREMOVE("1");
         oldperson.setCheckout_date(day);
@@ -196,44 +196,44 @@ public class OldpersonController {
     public OldStatResponse statOlePerson() throws Exception {
         OldStatResponse response = new OldStatResponse();
         List<OldpersonInfo> list = oldpersonInfoService.findAll();
-        int female=0;
-        int male=0;
-        int level1=0;
-        int level2=0;
-        int level3=0;
-        int[] a=new int[4];
-        int total=list.size();
-        if(total==0){
+        int female = 0;
+        int male = 0;
+        int level1 = 0;
+        int level2 = 0;
+        int level3 = 0;
+        int[] a = new int[4];
+        int total = list.size();
+        if (total == 0) {
             response.setMsg("数据库中无老人信息");
             response.setCode(0);
             return response;
-        }else{
-            for(int i=0;i<total;i++){
+        } else {
+            for (int i = 0; i < total; i++) {
                 OldpersonInfo oldpersonInfo = list.get(i);
-                int age= Utils.getAge(oldpersonInfo.getBirthday());
+                int age = Utils.getAge(oldpersonInfo.getBirthday());
 
-                if(oldpersonInfo.getREMOVE().equals("1")){
+                if (oldpersonInfo.getREMOVE().equals("1")) {
                     continue;
                 }
                 //统计健康状况
                 String[] s = oldpersonInfo.getHealth_state().split("_");
-                for(int j=0;j<4;j++){
-                    if(s[j].equals("1")){
+                for (int j = 0; j < 4; j++) {
+                    if (s[j].equals("1")) {
                         a[j]++;
                     }
                 }
                 //统计年龄分布
-                if(age<60){
+                if (age < 60) {
                     level1++;
-                }else if(age>=60&&age<70){
+                } else if (age >= 60 && age < 70) {
                     level2++;
-                }else{
+                } else {
                     level3++;
                 }
                 //统计性别
-                if(oldpersonInfo.getGender().equals("男")){
+                if (oldpersonInfo.getGender().equals("男")) {
                     male++;
-                }else{
+                } else {
                     female++;
                 }
             }
@@ -255,21 +255,21 @@ public class OldpersonController {
 
     //老人头像设定
     @RequestMapping(value = "/addPhotoOP")
-    public BaseResponse addPhotoOP(@RequestParam(value = "file") MultipartFile file,@RequestParam(value = "user") String id) throws IOException {
+    public BaseResponse addPhotoOP(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "user") String id) throws IOException {
         BaseResponse response = new BaseResponse();
         System.out.println(id);
         OldpersonInfo oldpersonInfo = oldpersonInfoService.findOldpersonById_card(id);
 
-        String base = imgPath+"images/oldPerson/";
-        String path=base+oldpersonInfo.getID().toString()+"/";
-        String fileName=oldpersonInfo.getID().toString()+".jpg";
-        System.out.println(path+fileName);
+        String base = imgPath + "images/oldPerson/";
+        String path = base + oldpersonInfo.getID().toString() + "/";
+        String fileName = oldpersonInfo.getID().toString() + ".jpg";
+        System.out.println(path + fileName);
         //设置头像路径
-        oldpersonInfo.setImgset_dir("images/oldPerson/"+oldpersonInfo.getID().toString()+"/"+oldpersonInfo.getID().toString()+".jpg");
+        oldpersonInfo.setImgset_dir("images/oldPerson/" + oldpersonInfo.getID().toString() + "/" + oldpersonInfo.getID().toString() + ".jpg");
 
-        if(file!=null&&id!=null){
-            Utils.getImaFile(file,path,fileName);
-        }else{
+        if (file != null && id != null) {
+            Utils.getImaFile(file, path, fileName);
+        } else {
             response.setMsg("失败");
             response.setCode(0);
             return response;
